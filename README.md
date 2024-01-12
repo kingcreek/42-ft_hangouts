@@ -20,7 +20,7 @@
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/your-username/ft_hangouts.git
+    git clone https://github.com/kingcreek/42-ft_hangouts.git
     ```
 
 2. Open the project in Android Studio.
