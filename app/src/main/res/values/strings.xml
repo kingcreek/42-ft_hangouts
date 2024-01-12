@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">ft_hangouts</string>
+
+    <string name="add_contact">Add Contact</string>
+
+
+    <string name="save_contact">Save Contact</string>
+
+    <string name="number_hint_t">Phone</string>
+    <string name="first_name_hint_t">First Name</string>
+    <string name="last_name_hint_t">Last Name</string>
+    <string name="nick_hint_t">Nick</string>
+    <string name="email_hint_t">Email</string>
+
+    <string name="number_hint">123456789</string>
+    <string name="first_name_hint">John</string>
+    <string name="last_name_hint">Doe</string>
+    <string name="nick_hint">john_morenito</string>
+    <string name="email_hint">john.doe@example.com</string>
+
+</resources>
