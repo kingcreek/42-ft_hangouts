@@ -79,12 +79,13 @@ public class ContactModel implements Parcelable {
         this.email = email;
     }
 
-    // Implementación de Parcelable
+    // Parcelable implementation (need to send as Intent)
     protected ContactModel(Parcel in) {
         id = in.readLong();
         number = in.readString();
         firstName = in.readString();
         lastName = in.readString();
+        address = in.readString();
         email = in.readString();
     }
 
@@ -111,6 +112,7 @@ public class ContactModel implements Parcelable {
         dest.writeString(number);
         dest.writeString(firstName);
         dest.writeString(lastName);
+        dest.writeString(address);
         dest.writeString(email);
     }
 }

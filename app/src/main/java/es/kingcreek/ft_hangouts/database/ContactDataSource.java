@@ -78,7 +78,7 @@ public class ContactDataSource {
         values.put(ContactDBHelper.COLUMN_LAST_NAME, lastName);
         values.put(ContactDBHelper.COLUMN_EMAIL, email);
 
-        // Convierte la imagen en un array de bytes (blob)
+        // Convert image to byte array (Blob)
         byte[] imageBytes = BitmapHelper.getBytesFromBitmap(imageBitmap);
         values.put(ContactDBHelper.COLUMN_IMAGE, imageBytes);
 
@@ -93,7 +93,7 @@ public class ContactDataSource {
             byte[] imageBytes = cursor.getBlob(cursor.getColumnIndexOrThrow(ContactDBHelper.COLUMN_IMAGE));
             cursor.close();
 
-            // Convierte el array de bytes de vuelta a un bitmap
+            // Convert byte array to Bitmap
             return BitmapHelper.getBitmapFromBytes(imageBytes);
         }
 
