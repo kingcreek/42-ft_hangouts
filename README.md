@@ -9,6 +9,12 @@
 - **View Contact:** View details of a specific contact.
 - **Edit Contact:** Modify the details of an existing contact.
 - **Delete Contact:** Remove a contact from the list.
+- **Filter Contact:** Search contact.
+
+- ### BONUS
+- **Call Contact:** Option to call contact.
+- **SMS Contact:** Option to send SMS to contact.
+- **Whatsapp:** Open whatsapp to send message to contact.
 
 ### Prerequisites
 
