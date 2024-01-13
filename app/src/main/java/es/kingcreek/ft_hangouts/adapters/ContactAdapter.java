@@ -9,17 +9,20 @@ import android.widget.CursorAdapter;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.List;
+
 import es.kingcreek.ft_hangouts.R;
 import es.kingcreek.ft_hangouts.database.ContactDBHelper;
+import es.kingcreek.ft_hangouts.models.ContactModel;
 
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> {
 
-    private Cursor cursor;
+    private List<ContactModel> contacts;
     private Context context;
 
-    public ContactAdapter(Context context, Cursor cursor) {
+    public ContactAdapter(Context context, List<ContactModel> contacts) {
         this.context = context;
-        this.cursor = cursor;
+        this.contacts = contacts;
     }
 
     @Override
@@ -30,33 +33,26 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        if (cursor.moveToPosition(position)) {
-            String number = cursor.getString(cursor.getColumnIndexOrThrow(ContactDBHelper.COLUMN_NUMBER));
-            String firstName = cursor.getString(cursor.getColumnIndexOrThrow(ContactDBHelper.COLUMN_FIRST_NAME));
-            String lastName = cursor.getString(cursor.getColumnIndexOrThrow(ContactDBHelper.COLUMN_LAST_NAME));
-            String email = cursor.getString(cursor.getColumnIndexOrThrow(ContactDBHelper.COLUMN_EMAIL));
+        ContactModel contact = contacts.get(position);
 
-            holder.textViewNumber.setText(number);
-            holder.textViewFirstName.setText(firstName);
-            holder.textViewLastName.setText(lastName);
-            holder.textViewEmail.setText(email);
-        }
+        holder.textViewNumber.setText(contact.getNumber());
+        holder.textViewFirstName.setText(contact.getFirstName());
+        holder.textViewLastName.setText(contact.getLastName());
     }
 
     @Override
     public int getItemCount() {
-        return (cursor == null) ? 0 : cursor.getCount();
+        return contacts.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView textViewNumber, textViewFirstName, textViewLastName, textViewEmail;
+        TextView textViewNumber, textViewFirstName, textViewLastName;
 
         public ViewHolder(View itemView) {
             super(itemView);
             textViewNumber = itemView.findViewById(R.id.textViewNumber);
             textViewFirstName = itemView.findViewById(R.id.textViewFirstName);
             textViewLastName = itemView.findViewById(R.id.textViewLastName);
-            textViewEmail = itemView.findViewById(R.id.textViewEmail);
         }
     }
 }

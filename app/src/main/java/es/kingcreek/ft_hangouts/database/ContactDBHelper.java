@@ -19,6 +19,8 @@ public class ContactDBHelper extends SQLiteOpenHelper {
     public static final String COLUMN_FIRST_NAME = "first_name";
     public static final String COLUMN_LAST_NAME = "last_name";
     public static final String COLUMN_ADDRESS = "address";
+
+    public static final String COLUMN_IMAGE = "image";
     public static final String COLUMN_EMAIL = "email";
 
     // Sentencia SQL para la creación de la tabla
@@ -29,6 +31,7 @@ public class ContactDBHelper extends SQLiteOpenHelper {
             + COLUMN_FIRST_NAME + " text not null, "
             + COLUMN_LAST_NAME + " text not null, "
             + COLUMN_ADDRESS + " text not null, "
+            + COLUMN_IMAGE + " text, "
             + COLUMN_EMAIL + " text not null);";
 
     public ContactDBHelper(Context context) {

@@ -1,5 +1,7 @@
 package es.kingcreek.ft_hangouts.activities;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +15,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import es.kingcreek.ft_hangouts.R;
 import es.kingcreek.ft_hangouts.database.ContactDBHelper;
 import es.kingcreek.ft_hangouts.database.ContactDataSource;
+import es.kingcreek.ft_hangouts.models.ContactModel;
 
 public class AddContactActivity extends AppCompatActivity {
 
@@ -50,12 +53,15 @@ public class AddContactActivity extends AppCompatActivity {
                 String lastName = etLastName.getText().toString();
                 String address = etAddress.getText().toString();
                 String email = etEmail.getText().toString();
+                ContactModel newContact = new ContactModel(number, firstName, lastName, address, email);
 
                 ContactDataSource dataSource = ContactDataSource.getInstance(getApplicationContext());
-                long result = dataSource.insertContact(number, firstName, lastName, address, email);
-                dataSource.close();
+                long result = dataSource.insertContact(newContact);
                 if (result != -1) {
                     Toast.makeText(getApplicationContext(), getString(R.string.insert_success), Toast.LENGTH_LONG).show();
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra("newContact", newContact);
+                    setResult(RESULT_OK, resultIntent);
                     finish();
                 } else {
                     Toast.makeText(getApplicationContext(), getString(R.string.insert_fail), Toast.LENGTH_LONG).show();
