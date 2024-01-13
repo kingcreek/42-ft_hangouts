@@ -15,6 +15,9 @@
 
 - **Call Contact:** Option to call contact.
 - **SMS Contact:** Option to send SMS to contact.
+
+### Extra
+
 - **Whatsapp:** Open whatsapp to send message to contact.
 
 ### Prerequisites
