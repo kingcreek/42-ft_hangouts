@@ -18,7 +18,7 @@ public class ContactDBHelper extends SQLiteOpenHelper {
     public static final String COLUMN_NUMBER = "number";
     public static final String COLUMN_FIRST_NAME = "first_name";
     public static final String COLUMN_LAST_NAME = "last_name";
-    public static final String COLUMN_NICK = "nick";
+    public static final String COLUMN_ADDRESS = "address";
     public static final String COLUMN_EMAIL = "email";
 
     // Sentencia SQL para la creación de la tabla
@@ -28,7 +28,7 @@ public class ContactDBHelper extends SQLiteOpenHelper {
             + COLUMN_NUMBER + " text not null, "
             + COLUMN_FIRST_NAME + " text not null, "
             + COLUMN_LAST_NAME + " text not null, "
-            + COLUMN_NICK + " text not null, "
+            + COLUMN_ADDRESS + " text not null, "
             + COLUMN_EMAIL + " text not null);";
 
     public ContactDBHelper(Context context) {
@@ -42,8 +42,6 @@ public class ContactDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // Aquí puedes realizar acciones de actualización si cambias la versión de la base de datos.
-        // Por ejemplo, podrías eliminar la tabla y luego llamar a onCreate para recrearla.
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONTACTS);
         onCreate(db);
     }

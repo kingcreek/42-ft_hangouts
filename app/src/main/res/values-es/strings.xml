@@ -9,13 +9,16 @@
     <string name="number_hint_t">Teléfono</string>
     <string name="first_name_hint_t">Nombre</string>
     <string name="last_name_hint_t">Apellido</string>
-    <string name="nick_hint_t">Alias</string>
+    <string name="address_hint_t">Direccion</string>
     <string name="email_hint_t">Email</string>
 
     <string name="number_hint">123456789</string>
     <string name="first_name_hint">John</string>
     <string name="last_name_hint">Doe</string>
-    <string name="nick_hint">john_morenito</string>
+    <string name="address_hint">c/idk n 42</string>
     <string name="email_hint">john.doe@example.com</string>
+
+    <string name="insert_success">Contacto agregado exitosamente.</string>
+    <string name="insert_fail">Error al agregar el contacto.</string>
 
 </resources>

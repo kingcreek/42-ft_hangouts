@@ -56,14 +56,14 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilNicl"
+        android:id="@+id/tilAddress"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/nick_hint_t">
+        android:hint="@string/address_hint_t">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etNick"
+            android:id="@+id/etAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
