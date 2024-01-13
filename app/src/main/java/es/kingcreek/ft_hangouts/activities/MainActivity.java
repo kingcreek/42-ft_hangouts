@@ -1,19 +1,24 @@
 package es.kingcreek.ft_hangouts.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import es.kingcreek.ft_hangouts.R;
 import es.kingcreek.ft_hangouts.adapters.ContactAdapter;
 import es.kingcreek.ft_hangouts.database.ContactDataSource;
+import es.kingcreek.ft_hangouts.fragment.SettingsDialogFragment;
 import es.kingcreek.ft_hangouts.helper.Constants;
+import es.kingcreek.ft_hangouts.helper.PreferenceHelper;
 import es.kingcreek.ft_hangouts.models.ContactModel;
 
 import android.database.Cursor;
@@ -48,6 +53,14 @@ public class MainActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Change toolbar Color
+        int toolbarColor = PreferenceHelper.getInstance(getApplicationContext()).getToolbarColor();
+        changeToolbarColor(toolbarColor);
+
+        // Change dark/idiot mode
+        boolean isDarkMode = PreferenceHelper.getInstance(getApplicationContext()).isDarkMode();
+        setAppTheme(isDarkMode);
+
         // Set RecyclerView
         RecyclerView recyclerView = findViewById(R.id.recyclerViewContacts);
         populateReciclerView(recyclerView);
@@ -77,10 +90,7 @@ public class MainActivity extends AppCompatActivity {
         SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-
-                return true;
-            }
+            public boolean onQueryTextSubmit(String query) {return true;}
 
             @Override
             public boolean onQueryTextChange(String newText) {
@@ -88,7 +98,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-
         return true;
     }
 
@@ -97,7 +106,8 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
-            Toast.makeText(this, "Ajustes", Toast.LENGTH_SHORT).show();
+            SettingsDialogFragment settingsDialog = new SettingsDialogFragment();
+            settingsDialog.show(getSupportFragmentManager(), "settingsDialog");
             return true;
         }
 
@@ -130,5 +140,19 @@ public class MainActivity extends AppCompatActivity {
         contactAdapter = new ContactAdapter(this, contactList);
         contactAdapter.attachSwipeToDelete(recyclerView);
         recyclerView.setAdapter(contactAdapter);
+    }
+
+    // Change toolbar color
+    private void changeToolbarColor(int colorResId) {
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(this, colorResId)));
+    }
+
+    // Change theme
+    private void setAppTheme(boolean isDarkMode) {
+        if (isDarkMode) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
     }
 }

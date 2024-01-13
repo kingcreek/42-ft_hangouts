@@ -1,0 +1,65 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Color Picker -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Selecciona el color del Toolbar"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"/>
+
+    <es.kingcreek.ft_hangouts.views.ColorPickerView
+        android:id="@+id/colorPicker"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="24dp"/>
+
+    <!--<View
+        android:id="@+id/colorPickerView"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/color_picker_background"
+        android:layout_marginBottom="16dp"/>-->
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switchDarkMode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Modo Oscuro"
+        android:layout_marginBottom="16dp"/>
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switchBonusMode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Modo Bonus"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp">
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Cancelar"/>
+
+        <Button
+            android:id="@+id/btnApply"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Aplicar"/>
+    </LinearLayout>
+</LinearLayout>

@@ -3,37 +3,71 @@ package es.kingcreek.ft_hangouts.fragment;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
+import es.kingcreek.ft_hangouts.R;
+import es.kingcreek.ft_hangouts.views.ColorPickerView;
+
+
 public class SettingsDialogFragment extends DialogFragment {
 
-    @NonNull
+    private ColorPickerView colorPickerView;
+    private Switch switchDarkMode;
+    private Switch switchBonusMode;
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Ajustes");
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+        View view = inflater.inflate(R.layout.dialog_settings, null);
 
-        builder.setItems(new CharSequence[]{"Cambiar color del toolbar", "Modo bonus"}, new DialogInterface.OnClickListener() {
+        colorPickerView = view.findViewById(R.id.colorPicker);
+        switchDarkMode = view.findViewById(R.id.switchDarkMode);
+        switchBonusMode = view.findViewById(R.id.switchBonusMode);
+
+        colorPickerView.setOnColorSelectedListener(new ColorPickerView.OnColorSelectedListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                handleSettingsOption(which);
+            public void onColorSelected(int color) {
+
             }
         });
 
-        return builder.create();
-    }
+        // Configura los listeners para los Switch
+        switchDarkMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-    private void handleSettingsOption(int option) {
-        switch (option) {
-            case 0:
-                // Change toolbar color
-                break;
-            case 1:
-                // Active Bonus
-                break;
-        }
+            }
+        });
+
+        switchBonusMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+            }
+        });
+
+        builder.setView(view)
+                .setTitle("Configuración")
+                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                })
+                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                });
+
+        return builder.create();
     }
 }
