@@ -6,10 +6,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.Switch;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.DialogFragment;
 
 import es.kingcreek.ft_hangouts.R;
@@ -19,8 +18,8 @@ import es.kingcreek.ft_hangouts.views.ColorPickerView;
 public class SettingsDialogFragment extends DialogFragment {
 
     private ColorPickerView colorPickerView;
-    private Switch switchDarkMode;
-    private Switch switchBonusMode;
+    private SwitchCompat switchDarkMode;
+    private SwitchCompat switchBonusMode;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -39,7 +38,6 @@ public class SettingsDialogFragment extends DialogFragment {
             }
         });
 
-        // Configura los listeners para los Switch
         switchDarkMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -54,20 +52,7 @@ public class SettingsDialogFragment extends DialogFragment {
             }
         });
 
-        builder.setView(view)
-                .setTitle("Configuración")
-                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-
-                    }
-                })
-                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-
-                    }
-                });
-
+        builder.setView(view).setTitle("Configuración");
         return builder.create();
     }
 }
