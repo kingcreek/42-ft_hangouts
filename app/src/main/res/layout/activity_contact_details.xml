@@ -82,14 +82,28 @@
 
             </LinearLayout>
 
-            <!-- Detalles del contacto (nombre, apellido, número, email, dirección) -->
-            <!-- Puedes añadir EditTexts para la edición -->
             <TextView
-                android:id="@+id/textViewDetails"
+                android:id="@+id/textViewNumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
-                android:text="Detalles del contacto"
+                android:text="Email"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/textViewEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="Email"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/textViewAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="Email"
                 android:textSize="16sp" />
 
             <!-- RecyclerView para el historial de conversaciones -->
@@ -100,7 +114,7 @@
                 android:layout_marginTop="16dp"
                 android:padding="16dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintTop_toBottomOf="@id/textViewDetails" />
+                app:layout_constraintTop_toBottomOf="@id/textViewAddress" />
 
         </LinearLayout>
     </ScrollView>

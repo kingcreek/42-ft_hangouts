@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,7 +22,8 @@ public class AddContactActivity extends AppCompatActivity {
 
     private TextInputLayout tilNumber, tilFirstName, tilLastName, tilAddress, tilEmail;
     private TextInputEditText etNumber, etFirstName, etLastName, etAddress, etEmail;
-    private Button btnAddContact;
+    private Button btnAddContact, btnSelectImage;
+    private ImageView imagePreview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

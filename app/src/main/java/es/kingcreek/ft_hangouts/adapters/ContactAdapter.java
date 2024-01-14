@@ -1,6 +1,7 @@
 package es.kingcreek.ft_hangouts.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.text.TextUtils;
@@ -20,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.kingcreek.ft_hangouts.R;
+import es.kingcreek.ft_hangouts.activities.AddContactActivity;
+import es.kingcreek.ft_hangouts.activities.MainActivity;
 import es.kingcreek.ft_hangouts.database.ContactDBHelper;
 import es.kingcreek.ft_hangouts.database.ContactDataSource;
 import es.kingcreek.ft_hangouts.models.ContactModel;
@@ -59,7 +62,9 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         holder.element.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "Name: " + contact.getFirstName(), Toast.LENGTH_LONG).show();
+                Intent i = new Intent(context, AddContactActivity.class);
+                i.putExtra("contact", contact.getId());
+                context.startActivity(i);
             }
         });
 

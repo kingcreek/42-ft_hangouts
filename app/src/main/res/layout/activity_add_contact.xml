@@ -87,6 +87,24 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <ImageView
+        android:id="@+id/imagePreview"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:visibility="gone"
+        android:background="@android:color/darker_gray"
+        android:scaleType="centerCrop" />
+
+    <Button
+        android:id="@+id/btnSelectImage"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Select Image" />
+
     <Button
         android:id="@+id/btnAddContact"
         style="@style/Widget.MaterialComponents.Button"

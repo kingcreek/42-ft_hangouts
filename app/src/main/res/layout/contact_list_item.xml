@@ -45,13 +45,4 @@
             android:text="Phone Number" />
     </LinearLayout>
 
-    <!-- Agrega un ImageButton para el menú -->
-    <ImageButton
-        android:id="@+id/imageButtonMenu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/ic_launcher_foreground" />
-
 </LinearLayout>

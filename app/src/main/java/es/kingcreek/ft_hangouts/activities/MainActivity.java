@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements OnDialogDismissLi
     {
         // Set layout manager
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        // Get cursor from db, create adapter and set into RecyclerView
+        // Get Contact list from db, create adapter and set into RecyclerView
         contactList = dataSource.getContacts();
         filteredContacts = dataSource.getContacts();
         contactAdapter = new ContactAdapter(this, contactList, filteredContacts);
