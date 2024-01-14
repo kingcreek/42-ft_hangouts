@@ -2,34 +2,25 @@ package es.kingcreek.ft_hangouts.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.lifecycle.viewmodel.CreationExtras;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 
 import es.kingcreek.ft_hangouts.R;
-import es.kingcreek.ft_hangouts.activities.AddContactActivity;
 import es.kingcreek.ft_hangouts.activities.ContactDetails;
-import es.kingcreek.ft_hangouts.activities.MainActivity;
-import es.kingcreek.ft_hangouts.database.ContactDBHelper;
 import es.kingcreek.ft_hangouts.database.ContactDataSource;
+import es.kingcreek.ft_hangouts.database.SMSDataSource;
 import es.kingcreek.ft_hangouts.models.ContactModel;
 import es.kingcreek.ft_hangouts.views.SwipeToDeleteCallback;
 
@@ -46,7 +37,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         this.context = context;
         this.contacts = contacts;
         this.filteredContacts = filteredContacts;
-        SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(context, this);
+        SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(context, this, context.getString(R.string.confirmation_msg));
         itemTouchHelper = new ItemTouchHelper(swipeToDeleteCallback);
     }
 
@@ -83,11 +74,19 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
     @Override
     public void onSwipeToDelete(int position, boolean confirmed) {
         if (confirmed) {
-            int originalPosition = contacts.indexOf(filteredContacts.get(position));
+            int originalPosition = -1;
+            for (int i = 0; i < filteredContacts.size(); i++) {
+                if (contacts.get(i).getId() == filteredContacts.get(position).getId()) {
+                    originalPosition = i;
+                    break;
+                }
+            }
             if (originalPosition != -1) {
                 //remove from DB
                 ContactModel contactModel = contacts.get(originalPosition);
+
                 ContactDataSource.getInstance(context).removeContactById(contactModel.getId());
+                SMSDataSource.getInstance(context).removeMessagesFromContact(contactModel.getId());
                 // Remove element from original list
                 contacts.remove(originalPosition);
                 // Remove element from filtered list

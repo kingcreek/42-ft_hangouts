@@ -14,8 +14,12 @@
     <string name="insert_success">Contacto agregado exitosamente.</string>
     <string name="insert_fail">Error al agregar el contacto.</string>
 
+    <string name="permisson_req">Permiso Requerido.</string>
+    <string name="permisson_explain">Esta funcionalidad requiere el permiso de</string>
     <string name="permisson_storage">Para agregar una imagen de perfil, necesitamos permisos de almacenamiento.</string>
     <string name="permisson_sms">Para recibir SMS, necesitamos permisos de SMS.</string>
+    <string name="permisson_sms_send">Para enviar SMS, necesitamos permisos de SEND_SMS.</string>
+    <string name="permisson_call">Para realizar llamadas, necesitamos permisos de CALL_PHONE.</string>
     <string name="permisson_notification">Para leer las notificaciones, necesitamos permisos de notificaciones.</string>
 
     <string name="ok">Ok</string>
@@ -23,6 +27,7 @@
 
     <string name="configuration">Configuración</string>
 
+    <string name="confirmation_msg_sms">¿Seguro que quieres eliminar este mensaje?</string>
     <string name="confirmation_title">Confirmar eliminación</string>
     <string name="confirmation_msg">¿Seguro que quieres eliminar este contacto?</string>
     <string name="yes">Si</string>
@@ -46,5 +51,9 @@
 
     <string name="search">Buscar</string>
     <string name="settings">Ajustes</string>
+
+    <string name="closing_t">Última ejecución:</string>
+
+    <string name="sms_dialog">Enviar mensaje</string>
 
 </resources>

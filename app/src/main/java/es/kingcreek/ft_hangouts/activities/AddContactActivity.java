@@ -5,6 +5,7 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -26,6 +27,8 @@ public class AddContactActivity extends AppCompatActivity {
     private ImageView imagePreview;
     private String imageUri;
 
+    int contactID = -1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +47,27 @@ public class AddContactActivity extends AppCompatActivity {
         imagePreview = findViewById(R.id.imagePreview);
         imagePreview.setVisibility(View.GONE);
 
+        // Get intent to check if it's edit contact
+        Intent intent = getIntent();
+        if (intent != null) {
+            contactID = intent.getIntExtra("contactID", -1);
+            if(contactID != -1)
+            {
+                ContactModel contact = ContactDataSource.getInstance(getApplicationContext()).getContactById(contactID);
+                Log.e("contactid", "nbr: " + contact.getNumber());
+                etNumber.setText(contact.getNumber());
+                etFirstName.setText(contact.getFirstName());
+                etLastName.setText(contact.getLastName());
+                etAddress.setText(contact.getAddress());
+                etEmail.setText(contact.getEmail());
+                if(!contact.getImage().isEmpty())
+                {
+                    imagePreview.setVisibility(View.VISIBLE);
+                    imagePreview.setImageURI(Uri.parse(contact.getImage()));
+                }
+            }
+        }
+
         btnSelectImage.setOnClickListener(v -> pickImageFromGallery());
 
         btnAddContact.setOnClickListener(view -> {
@@ -56,7 +80,14 @@ public class AddContactActivity extends AppCompatActivity {
             ContactModel newContact = new ContactModel(number, firstName, lastName, address, email, imageUri);
 
             ContactDataSource dataSource = ContactDataSource.getInstance(getApplicationContext());
-            long result = dataSource.insertContact(newContact);
+            long result = -1;
+            if(contactID != -1) {
+                newContact.setId(contactID);
+                result = dataSource.updateContact(newContact);
+            }
+             else
+                 result = dataSource.insertContact(newContact);
+
             if (result != -1) {
                 Toast.makeText(getApplicationContext(), getString(R.string.insert_success), Toast.LENGTH_LONG).show();
                 Intent resultIntent = new Intent();

@@ -6,11 +6,15 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
+import android.util.Log;
 import android.widget.Toast;
 
 import es.kingcreek.ft_hangouts.database.ContactDataSource;
+import es.kingcreek.ft_hangouts.database.SMSDataSource;
 import es.kingcreek.ft_hangouts.helper.Constants;
+import es.kingcreek.ft_hangouts.helper.Helper;
 import es.kingcreek.ft_hangouts.models.ContactModel;
+import es.kingcreek.ft_hangouts.models.SMSModel;
 
 public class SMSReceiver extends BroadcastReceiver {
     @Override
@@ -40,14 +44,27 @@ public class SMSReceiver extends BroadcastReceiver {
 
             // Add contact to DB
             int contactID = (int)ContactDataSource.getInstance(context).insertContact(new ContactModel(strNumber.toString(), strNumber.toString()));
-
+            String time = Helper.getCurrentDateTimeString();
             // Add message to DB
+            if (contactID == -1)
+                SMSDataSource.getInstance(context).insertSMS(new SMSModel((int)ContactDataSource.getInstance(context).getContactByNumber(strNumber.toString()), strNumber.toString(), strMessage.toString(), time));
+            else
+                SMSDataSource.getInstance(context).insertSMS(new SMSModel(contactID, strNumber.toString(), strMessage.toString(), time));
 
             // Send broadcast to update MainActivity
-            Intent broadcastReceiver = new Intent();
-            broadcastReceiver.setAction(Constants.SMS_RECEIVED);
-            broadcastReceiver.putExtra("contactID", contactID);
-            context.sendBroadcast(broadcastReceiver);
+            Intent mainBroadcast = new Intent();
+            mainBroadcast.setAction(Constants.SMS_RECEIVED_MAIN);
+            mainBroadcast.putExtra("contactID", contactID);
+            context.sendBroadcast(mainBroadcast);
+
+            // Send broadcast to update ContactDetails
+            Intent contactBroadcast = new Intent();
+            contactBroadcast.setAction(Constants.SMS_RECEIVED_DETAILS);
+            contactBroadcast.putExtra("contactID", contactID);
+            contactBroadcast.putExtra("phoneNumber", strNumber.toString());
+            contactBroadcast.putExtra("message", strMessage.toString());
+            contactBroadcast.putExtra("time", time);
+            context.sendBroadcast(contactBroadcast);
         }
     }
 }

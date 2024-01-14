@@ -14,10 +14,12 @@ public class SwipeToDeleteCallback extends ItemTouchHelper.Callback {
 
     private final SwipeToDeleteListener listener;
     private final Context context;
+    private String message;
 
-    public SwipeToDeleteCallback(Context context, SwipeToDeleteListener listener) {
+    public SwipeToDeleteCallback(Context context, SwipeToDeleteListener listener, String message) {
         this.context = context;
         this.listener = listener;
+        this.message = message;
     }
 
     @Override
@@ -41,7 +43,7 @@ public class SwipeToDeleteCallback extends ItemTouchHelper.Callback {
     private void showDeleteConfirmationDialog(final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(context.getString(R.string.confirmation_title))
-                .setMessage(context.getString(R.string.confirmation_msg))
+                .setMessage(message)
                 .setPositiveButton(context.getString(R.string.yes), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

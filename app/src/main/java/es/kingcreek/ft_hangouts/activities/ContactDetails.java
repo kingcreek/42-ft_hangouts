@@ -1,8 +1,12 @@
 package es.kingcreek.ft_hangouts.activities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -11,21 +15,32 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.List;
+
 import es.kingcreek.ft_hangouts.R;
+import es.kingcreek.ft_hangouts.adapters.ContactAdapter;
+import es.kingcreek.ft_hangouts.adapters.SMSAdapter;
 import es.kingcreek.ft_hangouts.database.ContactDataSource;
+import es.kingcreek.ft_hangouts.database.SMSDataSource;
+import es.kingcreek.ft_hangouts.helper.CommunicationUtils;
+import es.kingcreek.ft_hangouts.helper.Constants;
 import es.kingcreek.ft_hangouts.models.ContactModel;
+import es.kingcreek.ft_hangouts.models.SMSModel;
 
 public class ContactDetails extends AppCompatActivity {
 
-    Toolbar toolbar;
-    ImageView profileImage;
-    TextView textViewName, textViewEmail, textViewAddress, textViewNumber;
-    Button buttonEdit, buttonCall, buttonMessage;
-    RecyclerView recyclerView;
-
-    CardView cardViewEmail, cardViewAddress;
+    private BroadcastReceiver smsReceiver;
+    private List<SMSModel> smsList;
+    private Toolbar toolbar;
+    private ImageView profileImage;
+    private TextView textViewName, textViewEmail, textViewAddress, textViewNumber;
+    private Button buttonEdit, buttonCall, buttonMessage;
+    private RecyclerView recyclerView;
+    private SMSAdapter smsAdapter;
+    private CardView cardViewEmail, cardViewAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,25 +73,40 @@ public class ContactDetails extends AppCompatActivity {
         //Helper.changeToolbarColor(toolbar, toolbarColor);
 
         Intent intent = getIntent();
+        int contactID = -1;
         if (intent != null) {
-            int contactID = intent.getIntExtra("contact", -1);
-            if(contactID != -1)
+            contactID = intent.getIntExtra("contact", -1);
+            if(contactID == -1)
             {
-                populateData(contactID);
+                finish();
             }
         }
-
+        populateData(contactID);
+        int finalContactID = contactID;
         buttonEdit.setOnClickListener(v -> {
-
+            Intent i = new Intent(this, AddContactActivity.class);
+            i.putExtra("contactID", finalContactID);
+            startActivityForResult(i, Constants.EDIT_CONTACT_REQUEST_CODE);
         });
 
-        buttonCall.setOnClickListener(v -> {
+        smsReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction() != null && intent.getAction().equals(Constants.SMS_RECEIVED_MAIN)) {
+                    int contactID = intent.getIntExtra("contactID", -1);
+                    String phoneNumber = intent.getStringExtra("phoneNumber");
+                    String message = intent.getStringExtra("message");
+                    String time = intent.getStringExtra("time");
 
-        });
-
-        buttonMessage.setOnClickListener(v -> {
-
-        });
+                    if(contactID != -1) {
+                        smsList.add(new SMSModel(contactID, phoneNumber, message, time));
+                        smsAdapter.notifyDataSetChanged();
+                    }
+                }
+            }
+        };
+        IntentFilter intentFilter = new IntentFilter(Constants.SMS_RECEIVED_MAIN);
+        registerReceiver(smsReceiver, intentFilter);
     }
 
     private void populateData(int contactID)
@@ -98,5 +128,26 @@ public class ContactDetails extends AppCompatActivity {
             cardViewAddress.setVisibility(View.GONE);
         else
             textViewAddress.setText(contact.getAddress());
+
+        populateReciclerView(recyclerView, contactID);
+
+        buttonCall.setOnClickListener(v -> {
+            CommunicationUtils.makePhoneCall(this, contact.getNumber());
+        });
+
+        buttonMessage.setOnClickListener(v -> {
+            CommunicationUtils.sendSMS(this, contact.getNumber());
+        });
+    }
+
+    private void populateReciclerView(RecyclerView recyclerView, int contactID)
+    {
+        // Set layout manager
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        // Get SMS list from db, create adapter and set into RecyclerView
+        smsList = SMSDataSource.getInstance(this).getMessagesByContactId(contactID);
+        smsAdapter = new SMSAdapter(this, smsList);
+        smsAdapter.attachSwipeToDelete(recyclerView);
+        recyclerView.setAdapter(smsAdapter);
     }
 }

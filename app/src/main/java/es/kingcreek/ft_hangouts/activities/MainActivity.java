@@ -43,7 +43,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements OnDialogDismissListener {
 
     private BroadcastReceiver smsReceiver;
-    private ContactDataSource dataSource;
     private ContactAdapter contactAdapter;
     List<ContactModel> filteredContacts;
     List<ContactModel> contactList;
@@ -56,10 +55,6 @@ public class MainActivity extends AppCompatActivity implements OnDialogDismissLi
 
         // Check permissons
         permissions();
-
-        // Set DB
-        dataSource = ContactDataSource.getInstance(this);
-        dataSource.open();
 
         // Toolbar
         toolbar = findViewById(R.id.toolbar);
@@ -89,14 +84,14 @@ public class MainActivity extends AppCompatActivity implements OnDialogDismissLi
         smsReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if (intent.getAction() != null && intent.getAction().equals(Constants.SMS_RECEIVED)) {
+                if (intent.getAction() != null && intent.getAction().equals(Constants.SMS_RECEIVED_MAIN)) {
                     int contactID = intent.getIntExtra("contactID", -1);
                     if(contactID != -1)
                         addContactUpdate(contactID);
                 }
             }
         };
-        IntentFilter intentFilter = new IntentFilter(Constants.SMS_RECEIVED);
+        IntentFilter intentFilter = new IntentFilter(Constants.SMS_RECEIVED_MAIN);
         registerReceiver(smsReceiver, intentFilter);
     }
 
@@ -107,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements OnDialogDismissLi
         if (smsReceiver != null) {
             unregisterReceiver(smsReceiver);
         }
+        PreferenceHelper.getInstance(this).saveLastTime(Helper.getCurrentDateTimeString());
     }
 
     @Override
@@ -158,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements OnDialogDismissLi
 
     private void addContactUpdate(int newContact)
     {
-        ContactModel contact = dataSource.getContactById(newContact);
+        ContactModel contact = ContactDataSource.getInstance(this).getContactById(newContact);
         contactList.add(contact);
         filteredContacts.add(contact);
         if (contactAdapter.isFiltering()) {
@@ -173,8 +169,8 @@ public class MainActivity extends AppCompatActivity implements OnDialogDismissLi
         // Set layout manager
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         // Get Contact list from db, create adapter and set into RecyclerView
-        contactList = dataSource.getContacts();
-        filteredContacts = dataSource.getContacts();
+        contactList = ContactDataSource.getInstance(this).getContacts();
+        filteredContacts = ContactDataSource.getInstance(this).getContacts();
         contactAdapter = new ContactAdapter(this, contactList, filteredContacts);
         contactAdapter.attachSwipeToDelete(recyclerView);
         recyclerView.setAdapter(contactAdapter);
@@ -199,7 +195,9 @@ public class MainActivity extends AppCompatActivity implements OnDialogDismissLi
         // Lista de permisos que necesitas
         String[] requiredPermissions = {
                 Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.RECEIVE_SMS/*,
+                Manifest.permission.RECEIVE_SMS,
+                Manifest.permission.SEND_SMS,
+                Manifest.permission.CALL_PHONE/*,
                 Manifest.permission.BIND_NOTIFICATION_LISTENER_SERVICE*/
         };
 
@@ -243,6 +241,12 @@ public class MainActivity extends AppCompatActivity implements OnDialogDismissLi
                 break;
             case Manifest.permission.RECEIVE_SMS:
                 message = getString(R.string.permisson_sms);
+                break;
+            case Manifest.permission.SEND_SMS:
+                message = getString(R.string.permisson_sms_send);
+                break;
+            case Manifest.permission.CALL_PHONE:
+                message = getString(R.string.permisson_call);
                 break;
             case Manifest.permission.BIND_NOTIFICATION_LISTENER_SERVICE:
                 message = getString(R.string.permisson_notification);

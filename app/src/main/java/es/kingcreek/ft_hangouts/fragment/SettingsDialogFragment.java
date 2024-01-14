@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
@@ -26,6 +27,7 @@ public class SettingsDialogFragment extends DialogFragment {
     private SwitchCompat switchDarkMode;
     private SwitchCompat switchBonusMode;
     private Button btnCancel, btnApply;
+    private TextView time;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -42,6 +44,11 @@ public class SettingsDialogFragment extends DialogFragment {
         switchBonusMode = view.findViewById(R.id.switchBonusMode);
         btnCancel = view.findViewById(R.id.btnCancel);
         btnApply = view.findViewById(R.id.btnApply);
+        time = view.findViewById(R.id.time);
+
+        switchDarkMode.setChecked(preferences.isDarkMode());
+        switchBonusMode.setChecked(preferences.isBonusActive());
+        time.setText(preferences.getLastTime());
 
         // Temp vars
         final int[] tcolor = {preferences.getToolbarColor()};
