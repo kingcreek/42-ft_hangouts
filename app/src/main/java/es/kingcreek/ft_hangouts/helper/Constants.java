@@ -2,8 +2,12 @@ package es.kingcreek.ft_hangouts.helper;
 
 public class Constants {
 
+    // Permissons
+    public static final int MI_REQUEST_CODE = 1337;
+
     // Constants for request
-    public static final int ADD_CONTACT_REQUEST_CODE = 1;
+    public static final int ADD_CONTACT_REQUEST_CODE = 42;
+    public static final int PICK_IMAGE_REQUEST_CODE = 424;
 
     // Constants for preferences
     public static final String PREFERENCE_NAME = "MyAppPreferences";

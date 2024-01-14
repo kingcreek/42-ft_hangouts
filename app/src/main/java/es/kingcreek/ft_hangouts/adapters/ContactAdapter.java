@@ -4,11 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
+import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,11 +20,13 @@ import androidx.lifecycle.viewmodel.CreationExtras;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
 import es.kingcreek.ft_hangouts.R;
 import es.kingcreek.ft_hangouts.activities.AddContactActivity;
+import es.kingcreek.ft_hangouts.activities.ContactDetails;
 import es.kingcreek.ft_hangouts.activities.MainActivity;
 import es.kingcreek.ft_hangouts.database.ContactDBHelper;
 import es.kingcreek.ft_hangouts.database.ContactDataSource;
@@ -58,14 +63,14 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         holder.textViewNumber.setText(contact.getNumber());
         holder.textViewFirstName.setText(contact.getFirstName());
         holder.textViewLastName.setText(contact.getLastName());
+        if (contact.getImage() != null) {
+            holder.imageViewContact.setImageURI(Uri.parse(contact.getImage()));
+        }
 
-        holder.element.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(context, AddContactActivity.class);
-                i.putExtra("contact", contact.getId());
-                context.startActivity(i);
-            }
+        holder.element.setOnClickListener(v -> {
+            Intent i = new Intent(context, ContactDetails.class);
+            i.putExtra("contact", contact.getId());
+            context.startActivity(i);
         });
 
     }
@@ -101,6 +106,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView textViewNumber, textViewFirstName, textViewLastName;
+        ImageView imageViewContact;
         LinearLayout element;
 
         public ViewHolder(View itemView) {
@@ -109,6 +115,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
             textViewFirstName = itemView.findViewById(R.id.textViewFirstName);
             textViewLastName = itemView.findViewById(R.id.textViewLastName);
             element = itemView.findViewById(R.id.element);
+            imageViewContact = itemView.findViewById(R.id.imageViewContact);
 
         }
     }

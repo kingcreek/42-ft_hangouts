@@ -14,7 +14,9 @@ public class BitmapHelper {
     }
 
     public static Bitmap getBitmapFromBytes(byte[] bytes) {
-        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        if (bytes != null)
+            return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        return null;
     }
 
 }

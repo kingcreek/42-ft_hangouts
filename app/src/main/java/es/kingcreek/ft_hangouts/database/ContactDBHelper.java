@@ -28,10 +28,10 @@ public class ContactDBHelper extends SQLiteOpenHelper {
             + COLUMN_ID + " integer primary key autoincrement, "
             + COLUMN_NUMBER + " text not null, "
             + COLUMN_FIRST_NAME + " text not null, "
-            + COLUMN_LAST_NAME + " text not null, "
-            + COLUMN_ADDRESS + " text not null, "
+            + COLUMN_LAST_NAME + " text, "
+            + COLUMN_ADDRESS + " text, "
             + COLUMN_IMAGE + " text, "
-            + COLUMN_EMAIL + " text not null);";
+            + COLUMN_EMAIL + " text);";
 
     public ContactDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

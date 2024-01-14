@@ -1,15 +1,21 @@
 package es.kingcreek.ft_hangouts.activities;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
@@ -18,6 +24,7 @@ import es.kingcreek.ft_hangouts.adapters.ContactAdapter;
 import es.kingcreek.ft_hangouts.database.ContactDataSource;
 import es.kingcreek.ft_hangouts.fragment.SettingsDialogFragment;
 import es.kingcreek.ft_hangouts.helper.Constants;
+import es.kingcreek.ft_hangouts.helper.Helper;
 import es.kingcreek.ft_hangouts.helper.PreferenceHelper;
 import es.kingcreek.ft_hangouts.interfaces.OnDialogDismissListener;
 import es.kingcreek.ft_hangouts.models.ContactModel;
@@ -48,6 +55,9 @@ public class MainActivity extends AppCompatActivity implements OnDialogDismissLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Check permissons
+        permissons();
+
         // Set DB
         dataSource = ContactDataSource.getInstance(this);
         dataSource.open();
@@ -58,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements OnDialogDismissLi
 
         // Change toolbar Color
         int toolbarColor = PreferenceHelper.getInstance(getApplicationContext()).getToolbarColor();
-        changeToolbarColor(toolbarColor);
+        Helper.changeToolbarColor(toolbar, toolbarColor);
 
         // Change dark/idiot mode
         boolean isDarkMode = PreferenceHelper.getInstance(getApplicationContext()).isDarkMode();
@@ -150,11 +160,6 @@ public class MainActivity extends AppCompatActivity implements OnDialogDismissLi
         recyclerView.setAdapter(contactAdapter);
     }
 
-    // Change toolbar color
-    private void changeToolbarColor(int selectedColor) {
-        toolbar.setBackgroundColor(selectedColor);
-    }
-
     // Change theme
     private void setAppTheme(boolean isDarkMode) {
         if (isDarkMode) {
@@ -167,6 +172,82 @@ public class MainActivity extends AppCompatActivity implements OnDialogDismissLi
     @Override
     public void onDialogDismissed() {
         int toolbarColor = PreferenceHelper.getInstance(getApplicationContext()).getToolbarColor();
-        changeToolbarColor(toolbarColor);
+        Helper.changeToolbarColor(toolbar, toolbarColor);
+    }
+
+    private void permissions() {
+        // Lista de permisos que necesitas
+        String[] requiredPermissions = {
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.RECEIVE_SMS,
+                Manifest.permission.BIND_NOTIFICATION_LISTENER_SERVICE
+        };
+
+        // Lista de permisos que aún no han sido concedidos
+        List<String> permissionsToRequest = new ArrayList<>();
+
+        // Verificar cada permiso individualmente
+        for (String permission : requiredPermissions) {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                // Permiso no concedido, agregar a la lista de permisos para solicitar
+                permissionsToRequest.add(permission);
+            }
+        }
+
+        // Convertir la lista de permisos a un array y solicitar permisos
+        if (!permissionsToRequest.isEmpty()) {
+            String[] permissionsArray = permissionsToRequest.toArray(new String[0]);
+            ActivityCompat.requestPermissions(this, permissionsArray, Constants.MI_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == Constants.MI_REQUEST_CODE) {
+            for (int i = 0; i < permissions.length; i++) {
+                if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                    showPermissionExplanationDialog(permissions[i], requestCode);
+                }
+            }
+        }
+    }
+
+    private void showPermissionExplanationDialog(String permission, final int requestCode) {
+        String message = "";
+
+        switch (permission) {
+            case Manifest.permission.READ_EXTERNAL_STORAGE:
+                message = "Para agregar una imagen de perfil, necesitamos permisos de almacenamiento.";
+                break;
+            case Manifest.permission.RECEIVE_SMS:
+                message = "Para recibir SMS, necesitamos permisos de SMS.";
+                break;
+            case Manifest.permission.BIND_NOTIFICATION_LISTENER_SERVICE:
+                message = "Para leer las notificaciones, necesitamos permisos de notificaciones.";
+                break;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(message)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        requestPermissionAgain(requestCode);
+                    }
+                })
+                .setNegativeButton("Cancelar", null)
+                .create()
+                .show();
+    }
+
+    private void requestPermissionAgain(int requestCode) {
+        String[] requiredPermissions = {
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.RECEIVE_SMS,
+                Manifest.permission.BIND_NOTIFICATION_LISTENER_SERVICE
+        };
+        ActivityCompat.requestPermissions(this, requiredPermissions, requestCode);
     }
 }

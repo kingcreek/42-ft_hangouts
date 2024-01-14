@@ -4,6 +4,7 @@ import static es.kingcreek.ft_hangouts.database.ContactDBHelper.COLUMN_ADDRESS;
 import static es.kingcreek.ft_hangouts.database.ContactDBHelper.COLUMN_EMAIL;
 import static es.kingcreek.ft_hangouts.database.ContactDBHelper.COLUMN_FIRST_NAME;
 import static es.kingcreek.ft_hangouts.database.ContactDBHelper.COLUMN_ID;
+import static es.kingcreek.ft_hangouts.database.ContactDBHelper.COLUMN_IMAGE;
 import static es.kingcreek.ft_hangouts.database.ContactDBHelper.COLUMN_LAST_NAME;
 import static es.kingcreek.ft_hangouts.database.ContactDBHelper.COLUMN_NUMBER;
 import static es.kingcreek.ft_hangouts.database.ContactDBHelper.TABLE_CONTACTS;
@@ -52,13 +53,13 @@ public class ContactDataSource {
         values.put(COLUMN_NUMBER, newContact.getNumber());
         values.put(COLUMN_FIRST_NAME, newContact.getFirstName());
         values.put(COLUMN_LAST_NAME, newContact.getLastName());
-        values.put(ContactDBHelper.COLUMN_ADDRESS, newContact.getAddress());
+        values.put(COLUMN_ADDRESS, newContact.getAddress());
         values.put(COLUMN_EMAIL, newContact.getEmail());
+        values.put(COLUMN_IMAGE, newContact.getImage());
 
         return database.insert(TABLE_CONTACTS, null, values);
     }
 
-    @SuppressLint("Range")
     public ContactModel getContactById(int id) {
         ContactModel contact = null;
         String selection = COLUMN_ID + " = ?";
@@ -66,12 +67,13 @@ public class ContactDataSource {
         Cursor cursor = database.query(TABLE_CONTACTS, null, selection, selectionArgs, null, null, null);
         if (cursor != null && cursor.moveToFirst()) {
             contact = new ContactModel(
-                    cursor.getInt(cursor.getColumnIndex(COLUMN_ID)),
-                    cursor.getString(cursor.getColumnIndex(COLUMN_NUMBER)),
-                    cursor.getString(cursor.getColumnIndex(COLUMN_FIRST_NAME)),
-                    cursor.getString(cursor.getColumnIndex(COLUMN_LAST_NAME)),
-                    cursor.getString(cursor.getColumnIndex(COLUMN_ADDRESS)),
-                    cursor.getString(cursor.getColumnIndex(COLUMN_EMAIL))
+                    cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NUMBER)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_FIRST_NAME)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_LAST_NAME)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ADDRESS)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_EMAIL)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_IMAGE))
             );
             cursor.close();
         }
@@ -89,8 +91,9 @@ public class ContactDataSource {
                 String lastName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_LAST_NAME));
                 String address = cursor.getString(cursor.getColumnIndexOrThrow(ContactDBHelper.COLUMN_ADDRESS));
                 String email = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_EMAIL));
+                String image = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_IMAGE));
 
-                ContactModel contact = new ContactModel(id, number, firstName, lastName, address, email);
+                ContactModel contact = new ContactModel(id, number, firstName, lastName, address, email, image);
                 contactList.add(contact);
             } while (cursor.moveToNext());
 
@@ -103,11 +106,12 @@ public class ContactDataSource {
     {
         database.delete(TABLE_CONTACTS, COLUMN_ID + " = ?", new String[]{String.valueOf(id)});
     }
-    public long insertContactWithImage(String number, String firstName, String lastName, String email, Bitmap imageBitmap) {
+    public long insertContactWithImage(String number, String firstName, String lastName, String email, String address, Bitmap imageBitmap) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_NUMBER, number);
         values.put(COLUMN_FIRST_NAME, firstName);
         values.put(COLUMN_LAST_NAME, lastName);
+        values.put(COLUMN_ADDRESS, address);
         values.put(COLUMN_EMAIL, email);
 
         // Convert image to byte array (Blob)

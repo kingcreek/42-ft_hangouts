@@ -1,5 +1,6 @@
 package es.kingcreek.ft_hangouts.models;
 
+import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -13,22 +14,25 @@ public class ContactModel {
     private String lastName;
     private String address;
     private String email;
+    String image;
 
-    public ContactModel(int id, String number, String firstName, String lastName, String address, String email) {
+    public ContactModel(int id, String number, String firstName, String lastName, String address, String email, String image) {
         this.id = id;
         this.number = number;
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
         this.email = email;
+        this.image = image;
     }
 
-    public ContactModel(String number, String firstName, String lastName, String address, String email) {
+    public ContactModel(String number, String firstName, String lastName, String address, String email, String image) {
         this.number = number;
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
         this.email = email;
+        this.image = image;
     }
 
     public int getId() {
@@ -77,6 +81,14 @@ public class ContactModel {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
 }
