@@ -19,6 +19,7 @@ import es.kingcreek.ft_hangouts.database.ContactDataSource;
 import es.kingcreek.ft_hangouts.fragment.SettingsDialogFragment;
 import es.kingcreek.ft_hangouts.helper.Constants;
 import es.kingcreek.ft_hangouts.helper.PreferenceHelper;
+import es.kingcreek.ft_hangouts.interfaces.OnDialogDismissListener;
 import es.kingcreek.ft_hangouts.models.ContactModel;
 
 import android.database.Cursor;
@@ -30,13 +31,15 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnDialogDismissListener {
 
     private ContactDataSource dataSource;
     private ContactAdapter contactAdapter;
+    List<ContactModel> filteredContacts;
     List<ContactModel> contactList;
     private Toolbar toolbar;
 
@@ -85,7 +88,6 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
 
-        // Configura el SearchView
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -121,9 +123,11 @@ public class MainActivity extends AppCompatActivity {
 
         if (requestCode == Constants.ADD_CONTACT_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK && data != null) {
-                ContactModel newContact = data.getParcelableExtra("newContact");
-                if (newContact != null) {
-                    contactList.add(newContact);
+                int newContactId = data.getIntExtra("newContact", -1);
+                if (newContactId != -1) {
+                    ContactModel contact = dataSource.getContactById(newContactId);
+                    contactList.add(contact);
+                    filteredContacts.add(contact);
                     contactAdapter.notifyDataSetChanged();
                 }
             }
@@ -137,14 +141,15 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         // Get cursor from db, create adapter and set into RecyclerView
         contactList = dataSource.getContacts();
-        contactAdapter = new ContactAdapter(this, contactList);
+        filteredContacts = dataSource.getContacts();
+        contactAdapter = new ContactAdapter(this, contactList, filteredContacts);
         contactAdapter.attachSwipeToDelete(recyclerView);
         recyclerView.setAdapter(contactAdapter);
     }
 
     // Change toolbar color
-    private void changeToolbarColor(int colorResId) {
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(this, colorResId)));
+    private void changeToolbarColor(int selectedColor) {
+        toolbar.setBackgroundColor(selectedColor);
     }
 
     // Change theme
@@ -154,5 +159,11 @@ public class MainActivity extends AppCompatActivity {
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
+    }
+
+    @Override
+    public void onDialogDismissed() {
+        int toolbarColor = PreferenceHelper.getInstance(getApplicationContext()).getToolbarColor();
+        changeToolbarColor(toolbarColor);
     }
 }

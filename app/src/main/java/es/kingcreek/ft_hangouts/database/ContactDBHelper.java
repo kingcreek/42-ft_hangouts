@@ -23,7 +23,6 @@ public class ContactDBHelper extends SQLiteOpenHelper {
     public static final String COLUMN_IMAGE = "image";
     public static final String COLUMN_EMAIL = "email";
 
-    // Sentencia SQL para la creación de la tabla
     private static final String DATABASE_CREATE = "create table "
             + TABLE_CONTACTS + "("
             + COLUMN_ID + " integer primary key autoincrement, "

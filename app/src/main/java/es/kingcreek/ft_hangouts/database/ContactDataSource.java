@@ -1,5 +1,14 @@
 package es.kingcreek.ft_hangouts.database;
 
+import static es.kingcreek.ft_hangouts.database.ContactDBHelper.COLUMN_ADDRESS;
+import static es.kingcreek.ft_hangouts.database.ContactDBHelper.COLUMN_EMAIL;
+import static es.kingcreek.ft_hangouts.database.ContactDBHelper.COLUMN_FIRST_NAME;
+import static es.kingcreek.ft_hangouts.database.ContactDBHelper.COLUMN_ID;
+import static es.kingcreek.ft_hangouts.database.ContactDBHelper.COLUMN_LAST_NAME;
+import static es.kingcreek.ft_hangouts.database.ContactDBHelper.COLUMN_NUMBER;
+import static es.kingcreek.ft_hangouts.database.ContactDBHelper.TABLE_CONTACTS;
+
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -40,26 +49,46 @@ public class ContactDataSource {
 
     public long insertContact(ContactModel newContact) {
         ContentValues values = new ContentValues();
-        values.put(ContactDBHelper.COLUMN_NUMBER, newContact.getNumber());
-        values.put(ContactDBHelper.COLUMN_FIRST_NAME, newContact.getFirstName());
-        values.put(ContactDBHelper.COLUMN_LAST_NAME, newContact.getLastName());
+        values.put(COLUMN_NUMBER, newContact.getNumber());
+        values.put(COLUMN_FIRST_NAME, newContact.getFirstName());
+        values.put(COLUMN_LAST_NAME, newContact.getLastName());
         values.put(ContactDBHelper.COLUMN_ADDRESS, newContact.getAddress());
-        values.put(ContactDBHelper.COLUMN_EMAIL, newContact.getEmail());
+        values.put(COLUMN_EMAIL, newContact.getEmail());
 
-        return database.insert(ContactDBHelper.TABLE_CONTACTS, null, values);
+        return database.insert(TABLE_CONTACTS, null, values);
+    }
+
+    @SuppressLint("Range")
+    public ContactModel getContactById(int id) {
+        ContactModel contact = null;
+        String selection = COLUMN_ID + " = ?";
+        String[] selectionArgs = {String.valueOf(id)};
+        Cursor cursor = database.query(TABLE_CONTACTS, null, selection, selectionArgs, null, null, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            contact = new ContactModel(
+                    cursor.getInt(cursor.getColumnIndex(COLUMN_ID)),
+                    cursor.getString(cursor.getColumnIndex(COLUMN_NUMBER)),
+                    cursor.getString(cursor.getColumnIndex(COLUMN_FIRST_NAME)),
+                    cursor.getString(cursor.getColumnIndex(COLUMN_LAST_NAME)),
+                    cursor.getString(cursor.getColumnIndex(COLUMN_ADDRESS)),
+                    cursor.getString(cursor.getColumnIndex(COLUMN_EMAIL))
+            );
+            cursor.close();
+        }
+        return contact;
     }
 
     public List<ContactModel> getContacts() {
         List<ContactModel> contactList = new ArrayList<>();
-        Cursor cursor = database.query(ContactDBHelper.TABLE_CONTACTS, null, null, null, null, null, null);
+        Cursor cursor = database.query(TABLE_CONTACTS, null, null, null, null, null, null);
         if (cursor != null && cursor.moveToFirst()) {
             do {
-                long id = cursor.getLong(cursor.getColumnIndexOrThrow(ContactDBHelper.COLUMN_ID));
-                String number = cursor.getString(cursor.getColumnIndexOrThrow(ContactDBHelper.COLUMN_NUMBER));
-                String firstName = cursor.getString(cursor.getColumnIndexOrThrow(ContactDBHelper.COLUMN_FIRST_NAME));
-                String lastName = cursor.getString(cursor.getColumnIndexOrThrow(ContactDBHelper.COLUMN_LAST_NAME));
+                int id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID));
+                String number = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NUMBER));
+                String firstName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_FIRST_NAME));
+                String lastName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_LAST_NAME));
                 String address = cursor.getString(cursor.getColumnIndexOrThrow(ContactDBHelper.COLUMN_ADDRESS));
-                String email = cursor.getString(cursor.getColumnIndexOrThrow(ContactDBHelper.COLUMN_EMAIL));
+                String email = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_EMAIL));
 
                 ContactModel contact = new ContactModel(id, number, firstName, lastName, address, email);
                 contactList.add(contact);
@@ -67,27 +96,30 @@ public class ContactDataSource {
 
             cursor.close();
         }
-
         return contactList;
     }
 
+    public void removeContactById(int id)
+    {
+        database.delete(TABLE_CONTACTS, COLUMN_ID + " = ?", new String[]{String.valueOf(id)});
+    }
     public long insertContactWithImage(String number, String firstName, String lastName, String email, Bitmap imageBitmap) {
         ContentValues values = new ContentValues();
-        values.put(ContactDBHelper.COLUMN_NUMBER, number);
-        values.put(ContactDBHelper.COLUMN_FIRST_NAME, firstName);
-        values.put(ContactDBHelper.COLUMN_LAST_NAME, lastName);
-        values.put(ContactDBHelper.COLUMN_EMAIL, email);
+        values.put(COLUMN_NUMBER, number);
+        values.put(COLUMN_FIRST_NAME, firstName);
+        values.put(COLUMN_LAST_NAME, lastName);
+        values.put(COLUMN_EMAIL, email);
 
         // Convert image to byte array (Blob)
         byte[] imageBytes = BitmapHelper.getBytesFromBitmap(imageBitmap);
         values.put(ContactDBHelper.COLUMN_IMAGE, imageBytes);
 
-        return database.insert(ContactDBHelper.TABLE_CONTACTS, null, values);
+        return database.insert(TABLE_CONTACTS, null, values);
     }
 
     public Bitmap getImageForContact(long contactId) {
-        Cursor cursor = database.query(ContactDBHelper.TABLE_CONTACTS, new String[]{ContactDBHelper.COLUMN_IMAGE},
-                ContactDBHelper.COLUMN_ID + " = ?", new String[]{String.valueOf(contactId)}, null, null, null);
+        Cursor cursor = database.query(TABLE_CONTACTS, new String[]{ContactDBHelper.COLUMN_IMAGE},
+                COLUMN_ID + " = ?", new String[]{String.valueOf(contactId)}, null, null, null);
 
         if (cursor != null && cursor.moveToFirst()) {
             byte[] imageBytes = cursor.getBlob(cursor.getColumnIndexOrThrow(ContactDBHelper.COLUMN_IMAGE));

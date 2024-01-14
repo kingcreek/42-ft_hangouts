@@ -60,7 +60,7 @@ public class AddContactActivity extends AppCompatActivity {
                 if (result != -1) {
                     Toast.makeText(getApplicationContext(), getString(R.string.insert_success), Toast.LENGTH_LONG).show();
                     Intent resultIntent = new Intent();
-                    resultIntent.putExtra("newContact", newContact);
+                    resultIntent.putExtra("newContact", (int)result);
                     setResult(RESULT_OK, resultIntent);
                     finish();
                 } else {

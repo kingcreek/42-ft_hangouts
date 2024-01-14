@@ -2,6 +2,7 @@ package es.kingcreek.ft_hangouts.helper;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 
 public class PreferenceHelper {
 
@@ -24,7 +25,7 @@ public class PreferenceHelper {
     }
 
     public int getToolbarColor() {
-        return preferences.getInt(Constants.KEY_TOOLBAR_COLOR, /*Default color*/ android.R.color.primary_text_dark);
+        return preferences.getInt(Constants.KEY_TOOLBAR_COLOR, /*Default color*/ -29132);
     }
 
     public void setDarkMode(boolean isDarkMode) {

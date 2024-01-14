@@ -4,19 +4,22 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PointF;
 import android.graphics.RadialGradient;
 import android.graphics.Shader;
 import android.graphics.SweepGradient;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 public class ColorPickerView extends View {
 
     private Paint colorWheelPaint;
     private Paint selectorPaint;
     private OnColorSelectedListener onColorSelectedListener;
-
+    private int initialColor = -29132; // Orange
     private int selectorColor;
     private float selectorX, selectorY;
 
@@ -40,11 +43,6 @@ public class ColorPickerView extends View {
         selectorPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         selectorPaint.setStyle(Paint.Style.STROKE);
         selectorPaint.setStrokeWidth(5);
-
-        selectorX = getWidth() / 2f;
-        selectorY = getHeight() / 2f;
-
-        selectorColor = getColorAtPoint(selectorX, selectorY);
     }
 
     @Override
@@ -97,6 +95,7 @@ public class ColorPickerView extends View {
     }
 
     private int getColorAtPoint(float x, float y) {
+
         // Distance from center
         float centerX = getWidth() / 2f;
         float centerY = getHeight() / 2f;
@@ -115,11 +114,51 @@ public class ColorPickerView extends View {
         return Color.HSVToColor(new float[]{hue, saturation, 1});
     }
 
+    private PointF getPointForColor(int color) {
+        float[] hsv = new float[3];
+        Color.colorToHSV(color, hsv);
+
+        float hue = hsv[0];
+        float saturation = hsv[1];
+
+        float centerX = getWidth() / 2f;
+        float centerY = getHeight() / 2f;
+        float radius = Math.min(centerX, centerY);
+
+        // Angle to radian
+        float angleRad = (float) Math.toRadians(hue);
+
+        float x = centerX + saturation * radius * (float) Math.cos(angleRad);
+        float y = centerY + saturation * radius * (float) Math.sin(angleRad);
+
+        return new PointF(x, y);
+    }
+
     public void setOnColorSelectedListener(OnColorSelectedListener listener) {
         this.onColorSelectedListener = listener;
     }
 
     public interface OnColorSelectedListener {
         void onColorSelected(int color);
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldW, int oldH) {
+        super.onSizeChanged(w, h, oldW, oldH);
+
+        setCircleSelectionPosition();
+    }
+
+    public void setInitialColor(int color) {
+        initialColor = color;
+
+    }
+
+    public void setCircleSelectionPosition() {
+        PointF position = getPointForColor(initialColor);
+        selectorX = position.x;
+        selectorY = position.y;
+        selectorColor = getColorAtPoint(selectorX, selectorY);
+        invalidate();
     }
 }

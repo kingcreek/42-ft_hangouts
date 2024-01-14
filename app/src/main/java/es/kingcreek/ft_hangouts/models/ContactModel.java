@@ -5,16 +5,16 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
-public class ContactModel implements Parcelable {
+public class ContactModel {
 
-    private long id;
+    private int id;
     private String number;
     private String firstName;
     private String lastName;
     private String address;
     private String email;
 
-    public ContactModel(long id, String number, String firstName, String lastName, String address, String email) {
+    public ContactModel(int id, String number, String firstName, String lastName, String address, String email) {
         this.id = id;
         this.number = number;
         this.firstName = firstName;
@@ -31,11 +31,11 @@ public class ContactModel implements Parcelable {
         this.email = email;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -79,40 +79,4 @@ public class ContactModel implements Parcelable {
         this.email = email;
     }
 
-    // Parcelable implementation (need to send as Intent)
-    protected ContactModel(Parcel in) {
-        id = in.readLong();
-        number = in.readString();
-        firstName = in.readString();
-        lastName = in.readString();
-        address = in.readString();
-        email = in.readString();
-    }
-
-    public static final Creator<ContactModel> CREATOR = new Creator<ContactModel>() {
-        @Override
-        public ContactModel createFromParcel(Parcel in) {
-            return new ContactModel(in);
-        }
-
-        @Override
-        public ContactModel[] newArray(int size) {
-            return new ContactModel[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(@NonNull Parcel dest, int flags) {
-        dest.writeLong(id);
-        dest.writeString(number);
-        dest.writeString(firstName);
-        dest.writeString(lastName);
-        dest.writeString(address);
-        dest.writeString(email);
-    }
 }
