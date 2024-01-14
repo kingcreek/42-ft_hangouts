@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Selecciona el color del Toolbar"
+        android:text="@string/selector_color"
         android:textSize="16sp"
         android:textStyle="bold"
         android:layout_gravity="center"
@@ -33,14 +33,14 @@
         android:id="@+id/switchDarkMode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Modo Oscuro"
+        android:text="@string/darkmode"
         android:layout_marginBottom="16dp"/>
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/switchBonusMode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Modo Bonus"/>
+        android:text="@string/bonus"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -53,13 +53,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Cancelar"/>
+            android:text="@string/cancel"/>
 
         <Button
             android:id="@+id/btnApply"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Aplicar"/>
+            android:text="@string/apply"/>
     </LinearLayout>
 </LinearLayout>

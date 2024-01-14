@@ -3,27 +3,16 @@ package es.kingcreek.ft_hangouts.activities;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.ParcelFileDescriptor;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
-
-import java.io.FileDescriptor;
-import java.io.IOException;
 
 import es.kingcreek.ft_hangouts.R;
 import es.kingcreek.ft_hangouts.database.ContactDataSource;
@@ -32,7 +21,6 @@ import es.kingcreek.ft_hangouts.models.ContactModel;
 
 public class AddContactActivity extends AppCompatActivity {
 
-    private TextInputLayout tilNumber, tilFirstName, tilLastName, tilAddress, tilEmail;
     private TextInputEditText etNumber, etFirstName, etLastName, etAddress, etEmail;
     private Button btnAddContact, btnSelectImage;
     private ImageView imagePreview;
@@ -42,13 +30,6 @@ public class AddContactActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_contact);
-
-        // Views Titles
-        tilNumber = findViewById(R.id.tilNumber);
-        tilFirstName = findViewById(R.id.tilFirstName);
-        tilLastName = findViewById(R.id.tilLastName);
-        tilAddress = findViewById(R.id.tilAddress);
-        tilEmail = findViewById(R.id.tilEmail);
 
         // Views Input
         etNumber = findViewById(R.id.etNumber);

@@ -90,7 +90,7 @@ public class SettingsDialogFragment extends DialogFragment {
             }
         });
 
-        builder.setView(view).setTitle("Configuración");
+        builder.setView(view).setTitle(getString(R.string.configuration));
         return builder.create();
     }
 

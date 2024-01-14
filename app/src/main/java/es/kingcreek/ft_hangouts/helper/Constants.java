@@ -15,4 +15,7 @@ public class Constants {
     public static final String KEY_IS_DARK_MODE = "is_dark_mode";
     public static final String KEY_IS_BONUS_ACTIVE = "is_bonus_active";
     public static final String KEY_LAST_TIME = "last_time";
+
+    // Broadcast
+    public static final String SMS_RECEIVED = "sms_received";
 }

@@ -8,6 +8,10 @@ import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.widget.Toast;
 
+import es.kingcreek.ft_hangouts.database.ContactDataSource;
+import es.kingcreek.ft_hangouts.helper.Constants;
+import es.kingcreek.ft_hangouts.models.ContactModel;
+
 public class SMSReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent)
@@ -34,12 +38,15 @@ public class SMSReceiver extends BroadcastReceiver {
                 strMessage.append(messages[i].getMessageBody());
             }
 
-            strNumber = new StringBuilder(strNumber.toString().replace("+34", "0"));
-            Toast.makeText(context, "Message: " + strNumber, Toast.LENGTH_SHORT).show();
+            // Add contact to DB
+            int contactID = (int)ContactDataSource.getInstance(context).insertContact(new ContactModel(strNumber.toString(), strNumber.toString()));
+
+            // Add message to DB
+
+            // Send broadcast to update MainActivity
             Intent broadcastReceiver = new Intent();
-            broadcastReceiver.setAction("SMS_RECEIVED_ACTION");
-            broadcastReceiver.putExtra("number", strNumber.toString());
-            broadcastReceiver.putExtra("message", strMessage.toString());
+            broadcastReceiver.setAction(Constants.SMS_RECEIVED);
+            broadcastReceiver.putExtra("contactID", contactID);
             context.sendBroadcast(broadcastReceiver);
         }
     }

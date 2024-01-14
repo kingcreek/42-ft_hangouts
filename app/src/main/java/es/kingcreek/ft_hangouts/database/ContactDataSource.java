@@ -44,18 +44,43 @@ public class ContactDataSource {
         database = dbHelper.getWritableDatabase();
     }
 
+    private boolean contactExists(String phoneNumber) {
+        Cursor cursor = database.query(
+                TABLE_CONTACTS,
+                null,
+                COLUMN_NUMBER + " = ? OR " + COLUMN_FIRST_NAME + " = ?",
+                new String[]{phoneNumber, phoneNumber},
+                null,
+                null,
+                null
+        );
+
+        boolean exists = cursor != null && cursor.getCount() > 0;
+
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        return exists;
+    }
+
     public void close() {
         dbHelper.close();
     }
 
     public long insertContact(ContactModel newContact) {
+
+        if (contactExists(newContact.getNumber())) {
+            return -1;
+        }
+
         ContentValues values = new ContentValues();
-        values.put(COLUMN_NUMBER, newContact.getNumber());
-        values.put(COLUMN_FIRST_NAME, newContact.getFirstName());
-        values.put(COLUMN_LAST_NAME, newContact.getLastName());
-        values.put(COLUMN_ADDRESS, newContact.getAddress());
-        values.put(COLUMN_EMAIL, newContact.getEmail());
-        values.put(COLUMN_IMAGE, newContact.getImage());
+        values.put(COLUMN_NUMBER, newContact.getNumber() == null ? "" : newContact.getNumber());
+        values.put(COLUMN_FIRST_NAME, newContact.getFirstName() == null ? "" : newContact.getFirstName());
+        values.put(COLUMN_LAST_NAME, newContact.getLastName() == null ? "" : newContact.getLastName());
+        values.put(COLUMN_ADDRESS, newContact.getAddress() == null ? "" : newContact.getAddress());
+        values.put(COLUMN_EMAIL, newContact.getEmail() == null ? "" : newContact.getEmail());
+        values.put(COLUMN_IMAGE, newContact.getImage() == null ? "" : newContact.getImage());
 
         return database.insert(TABLE_CONTACTS, null, values);
     }
@@ -106,33 +131,5 @@ public class ContactDataSource {
     {
         database.delete(TABLE_CONTACTS, COLUMN_ID + " = ?", new String[]{String.valueOf(id)});
     }
-    public long insertContactWithImage(String number, String firstName, String lastName, String email, String address, Bitmap imageBitmap) {
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_NUMBER, number);
-        values.put(COLUMN_FIRST_NAME, firstName);
-        values.put(COLUMN_LAST_NAME, lastName);
-        values.put(COLUMN_ADDRESS, address);
-        values.put(COLUMN_EMAIL, email);
 
-        // Convert image to byte array (Blob)
-        byte[] imageBytes = BitmapHelper.getBytesFromBitmap(imageBitmap);
-        values.put(ContactDBHelper.COLUMN_IMAGE, imageBytes);
-
-        return database.insert(TABLE_CONTACTS, null, values);
-    }
-
-    public Bitmap getImageForContact(long contactId) {
-        Cursor cursor = database.query(TABLE_CONTACTS, new String[]{ContactDBHelper.COLUMN_IMAGE},
-                COLUMN_ID + " = ?", new String[]{String.valueOf(contactId)}, null, null, null);
-
-        if (cursor != null && cursor.moveToFirst()) {
-            byte[] imageBytes = cursor.getBlob(cursor.getColumnIndexOrThrow(ContactDBHelper.COLUMN_IMAGE));
-            cursor.close();
-
-            // Convert byte array to Bitmap
-            return BitmapHelper.getBitmapFromBytes(imageBytes);
-        }
-
-        return null;
-    }
 }

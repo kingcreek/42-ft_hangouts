@@ -33,22 +33,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16sp"
-            android:textStyle="bold"
-            android:text="First Name" />
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/textViewLastName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:text="Last Name" />
+            android:textSize="16sp"/>
 
         <TextView
             android:id="@+id/textViewNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:text="Phone Number" />
+            android:textSize="14sp"/>
     </LinearLayout>
 
 </LinearLayout>

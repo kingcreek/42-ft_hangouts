@@ -3,7 +3,6 @@
 
     <string name="add_contact">Nuevo Contacto</string>
 
-
     <string name="save_contact">Guardar Contacto</string>
 
     <string name="number_hint_t">Teléfono</string>
@@ -12,13 +11,40 @@
     <string name="address_hint_t">Direccion</string>
     <string name="email_hint_t">Email</string>
 
-    <string name="number_hint">123456789</string>
-    <string name="first_name_hint">John</string>
-    <string name="last_name_hint">Doe</string>
-    <string name="address_hint">c/idk n 42</string>
-    <string name="email_hint">john.doe@example.com</string>
-
     <string name="insert_success">Contacto agregado exitosamente.</string>
     <string name="insert_fail">Error al agregar el contacto.</string>
+
+    <string name="permisson_storage">Para agregar una imagen de perfil, necesitamos permisos de almacenamiento.</string>
+    <string name="permisson_sms">Para recibir SMS, necesitamos permisos de SMS.</string>
+    <string name="permisson_notification">Para leer las notificaciones, necesitamos permisos de notificaciones.</string>
+
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancelar</string>
+
+    <string name="configuration">Configuración</string>
+
+    <string name="confirmation_title">Confirmar eliminación</string>
+    <string name="confirmation_msg">¿Seguro que quieres eliminar este contacto?</string>
+    <string name="yes">Si</string>
+    <string name="no">No</string>
+
+    <string name="select_image">Select Image</string>
+
+    <string name="name">Nombre Apellido</string>
+    <string name="edit">Editar</string>
+    <string name="call">Llamar</string>
+    <string name="send_sms">Mensaje</string>
+
+    <string name="number">Número:</string>
+    <string name="email">Email:</string>
+    <string name="address">Dirección:</string>
+
+    <string name="selector_color">Selecciona el color del Toolbar</string>
+    <string name="darkmode">Modo Oscuro</string>
+    <string name="bonus">Modo Bonus</string>
+    <string name="apply">Aplicar</string>
+
+    <string name="search">Buscar</string>
+    <string name="settings">Ajustes</string>
 
 </resources>

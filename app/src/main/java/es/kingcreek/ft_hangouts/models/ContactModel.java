@@ -35,6 +35,11 @@ public class ContactModel {
         this.image = image;
     }
 
+    public ContactModel(String number, String firstName) {
+        this.number = number;
+        this.firstName = firstName;
+    }
+
     public int getId() {
         return id;
     }

@@ -8,6 +8,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import es.kingcreek.ft_hangouts.R;
+
 public class SwipeToDeleteCallback extends ItemTouchHelper.Callback {
 
     private final SwipeToDeleteListener listener;
@@ -38,15 +40,15 @@ public class SwipeToDeleteCallback extends ItemTouchHelper.Callback {
 
     private void showDeleteConfirmationDialog(final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Confirmar eliminación")
-                .setMessage("¿Seguro que quieres eliminar este contacto?")
-                .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+        builder.setTitle(context.getString(R.string.confirmation_title))
+                .setMessage(context.getString(R.string.confirmation_msg))
+                .setPositiveButton(context.getString(R.string.yes), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         listener.onSwipeToDelete(position, true);
                     }
                 })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                .setNegativeButton(context.getString(R.string.no), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         listener.onSwipeToDelete(position, false);

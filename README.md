@@ -36,3 +36,11 @@
 2. Open the project in Android Studio.
 
 3. Build and run the project on your emulator or connected device.
+
+### Test SMS
+
+Install telnet client
+
+connect: `telnet localhost <emulator_port>` (usually 5554, can check with adb devices)
+
+send sms: `sms send <phone_number> <message>`

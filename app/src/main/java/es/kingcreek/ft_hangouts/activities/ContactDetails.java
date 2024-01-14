@@ -10,12 +10,11 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import es.kingcreek.ft_hangouts.R;
 import es.kingcreek.ft_hangouts.database.ContactDataSource;
-import es.kingcreek.ft_hangouts.helper.Helper;
-import es.kingcreek.ft_hangouts.helper.PreferenceHelper;
 import es.kingcreek.ft_hangouts.models.ContactModel;
 
 public class ContactDetails extends AppCompatActivity {
@@ -26,6 +25,7 @@ public class ContactDetails extends AppCompatActivity {
     Button buttonEdit, buttonCall, buttonMessage;
     RecyclerView recyclerView;
 
+    CardView cardViewEmail, cardViewAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +47,9 @@ public class ContactDetails extends AppCompatActivity {
         buttonMessage = findViewById(R.id.buttonMessage);
 
         recyclerView = findViewById(R.id.recyclerViewConversationHistory);
+
+        cardViewEmail = findViewById(R.id.cardViewEmail);
+        cardViewAddress = findViewById(R.id.cardViewAddress);
 
         // Toolbar
         setSupportActionBar(toolbar);
@@ -87,7 +90,13 @@ public class ContactDetails extends AppCompatActivity {
         }
         textViewName.setText(new StringBuilder().append(contact.getFirstName()).append(" ").append(contact.getLastName()).toString());
         textViewNumber.setText(contact.getNumber());
-        textViewEmail.setText(contact.getEmail());
-        textViewAddress.setText(contact.getAddress());
+        if (contact.getEmail().isEmpty())
+            cardViewEmail.setVisibility(View.GONE);
+        else
+            textViewEmail.setText(contact.getEmail());
+        if (contact.getAddress().isEmpty())
+            cardViewAddress.setVisibility(View.GONE);
+        else
+            textViewAddress.setText(contact.getAddress());
     }
 }

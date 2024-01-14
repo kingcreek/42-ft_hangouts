@@ -63,7 +63,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         holder.textViewNumber.setText(contact.getNumber());
         holder.textViewFirstName.setText(contact.getFirstName());
         holder.textViewLastName.setText(contact.getLastName());
-        if (contact.getImage() != null) {
+        if (!contact.getImage().isEmpty()) {
             holder.imageViewContact.setImageURI(Uri.parse(contact.getImage()));
         }
 

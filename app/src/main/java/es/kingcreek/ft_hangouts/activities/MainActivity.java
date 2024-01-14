@@ -11,12 +11,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import es.kingcreek.ft_hangouts.R;
@@ -29,21 +30,19 @@ import es.kingcreek.ft_hangouts.helper.PreferenceHelper;
 import es.kingcreek.ft_hangouts.interfaces.OnDialogDismissListener;
 import es.kingcreek.ft_hangouts.models.ContactModel;
 
-import android.database.Cursor;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import androidx.appcompat.widget.SearchView;
-import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class MainActivity extends AppCompatActivity implements OnDialogDismissListener {
 
+    private BroadcastReceiver smsReceiver;
     private ContactDataSource dataSource;
     private ContactAdapter contactAdapter;
     List<ContactModel> filteredContacts;
@@ -86,12 +85,28 @@ public class MainActivity extends AppCompatActivity implements OnDialogDismissLi
                 startActivityForResult(intent, Constants.ADD_CONTACT_REQUEST_CODE);
             }
         });
+
+        smsReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction() != null && intent.getAction().equals(Constants.SMS_RECEIVED)) {
+                    int contactID = intent.getIntExtra("contactID", -1);
+                    if(contactID != -1)
+                        addContactUpdate(contactID);
+                }
+            }
+        };
+        IntentFilter intentFilter = new IntentFilter(Constants.SMS_RECEIVED);
+        registerReceiver(smsReceiver, intentFilter);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         //dataSource.close();
+        if (smsReceiver != null) {
+            unregisterReceiver(smsReceiver);
+        }
     }
 
     @Override
@@ -135,16 +150,21 @@ public class MainActivity extends AppCompatActivity implements OnDialogDismissLi
             if (resultCode == Activity.RESULT_OK && data != null) {
                 int newContactId = data.getIntExtra("newContact", -1);
                 if (newContactId != -1) {
-                    ContactModel contact = dataSource.getContactById(newContactId);
-                    contactList.add(contact);
-                    filteredContacts.add(contact);
-                    if (contactAdapter.isFiltering()) {
-                        contactAdapter.filter(contactAdapter.getFilter());
-                    }
-                    contactAdapter.notifyDataSetChanged();
+                    addContactUpdate(newContactId);
                 }
             }
         }
+    }
+
+    private void addContactUpdate(int newContact)
+    {
+        ContactModel contact = dataSource.getContactById(newContact);
+        contactList.add(contact);
+        filteredContacts.add(contact);
+        if (contactAdapter.isFiltering()) {
+            contactAdapter.filter(contactAdapter.getFilter());
+        }
+        contactAdapter.notifyDataSetChanged();
     }
 
     // Function to populate RecyclerView first time
@@ -179,8 +199,8 @@ public class MainActivity extends AppCompatActivity implements OnDialogDismissLi
         // Lista de permisos que necesitas
         String[] requiredPermissions = {
                 Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.RECEIVE_SMS,
-                Manifest.permission.BIND_NOTIFICATION_LISTENER_SERVICE
+                Manifest.permission.RECEIVE_SMS/*,
+                Manifest.permission.BIND_NOTIFICATION_LISTENER_SERVICE*/
         };
 
         // Lista de permisos que aún no han sido concedidos
@@ -219,25 +239,25 @@ public class MainActivity extends AppCompatActivity implements OnDialogDismissLi
 
         switch (permission) {
             case Manifest.permission.READ_EXTERNAL_STORAGE:
-                message = "Para agregar una imagen de perfil, necesitamos permisos de almacenamiento.";
+                message = getString(R.string.permisson_storage);
                 break;
             case Manifest.permission.RECEIVE_SMS:
-                message = "Para recibir SMS, necesitamos permisos de SMS.";
+                message = getString(R.string.permisson_sms);
                 break;
             case Manifest.permission.BIND_NOTIFICATION_LISTENER_SERVICE:
-                message = "Para leer las notificaciones, necesitamos permisos de notificaciones.";
+                message = getString(R.string.permisson_notification);
                 break;
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(message)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         requestPermissionAgain(requestCode);
                     }
                 })
-                .setNegativeButton("Cancelar", null)
+                .setNegativeButton(getString(R.string.cancel), null)
                 .create()
                 .show();
     }
