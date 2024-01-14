@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements OnDialogDismissLi
         setContentView(R.layout.activity_main);
 
         // Check permissons
-        permissons();
+        permissions();
 
         // Set DB
         dataSource = ContactDataSource.getInstance(this);
