@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.lifecycle.viewmodel.CreationExtras;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,6 +31,8 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
     private List<ContactModel> filteredContacts;
     private Context context;
     private final ItemTouchHelper itemTouchHelper;
+    private boolean isFiltering = false;
+    private String filter = "";
 
     public ContactAdapter(Context context, List<ContactModel> contacts, List<ContactModel> filteredContacts) {
         this.context = context;
@@ -108,9 +111,11 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
     // Search filter
     public void filter(String query) {
         filteredContacts.clear();
+        filter = query;
         // If search are empty
         if (TextUtils.isEmpty(query)) {
             filteredContacts.addAll(contacts);
+            isFiltering = false;
         } else {
             // Filter
             for (ContactModel contact : contacts) {
@@ -122,7 +127,18 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
                     }
                 }
             }
+            isFiltering = true;
         }
         notifyDataSetChanged();
+    }
+
+    public String getFilter()
+    {
+        return filter;
+    }
+
+    public boolean isFiltering()
+    {
+        return isFiltering;
     }
 }

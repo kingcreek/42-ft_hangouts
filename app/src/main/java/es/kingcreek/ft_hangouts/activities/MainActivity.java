@@ -128,6 +128,9 @@ public class MainActivity extends AppCompatActivity implements OnDialogDismissLi
                     ContactModel contact = dataSource.getContactById(newContactId);
                     contactList.add(contact);
                     filteredContacts.add(contact);
+                    if (contactAdapter.isFiltering()) {
+                        contactAdapter.filter(contactAdapter.getFilter());
+                    }
                     contactAdapter.notifyDataSetChanged();
                 }
             }
