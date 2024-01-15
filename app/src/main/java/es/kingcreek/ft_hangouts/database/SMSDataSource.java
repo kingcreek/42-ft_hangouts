@@ -2,6 +2,7 @@ package es.kingcreek.ft_hangouts.database;
 
 
 import static es.kingcreek.ft_hangouts.database.DatabaseTables.COLUMN_CONTACT_ID;
+import static es.kingcreek.ft_hangouts.database.DatabaseTables.COLUMN_MESSAGE_DIR;
 import static es.kingcreek.ft_hangouts.database.DatabaseTables.COLUMN_MESSAGE_ID;
 import static es.kingcreek.ft_hangouts.database.DatabaseTables.COLUMN_MESSAGE_TEXT;
 import static es.kingcreek.ft_hangouts.database.DatabaseTables.COLUMN_PHONE_NUMBER;
@@ -55,6 +56,7 @@ public class SMSDataSource {
         values.put(COLUMN_PHONE_NUMBER, newSMS.getPhoneNumber() == null ? "" : newSMS.getPhoneNumber());
         values.put(COLUMN_MESSAGE_TEXT, newSMS.getMessage() == null ? "" : newSMS.getMessage());
         values.put(COLUMN_TIMESTAMP, newSMS.getTime() == null ? "" : newSMS.getTime());
+        values.put(COLUMN_MESSAGE_DIR, newSMS.getInOut());
 
         return database.insert(TABLE_MESSAGES, null, values);
     }
@@ -62,7 +64,7 @@ public class SMSDataSource {
     public List<SMSModel> getMessagesByContactId(long contactId) {
         List<SMSModel> messagesList = new ArrayList<>();
 
-        String[] columns = {COLUMN_MESSAGE_ID, COLUMN_CONTACT_ID, COLUMN_PHONE_NUMBER, COLUMN_MESSAGE_TEXT, COLUMN_TIMESTAMP};
+        String[] columns = {COLUMN_MESSAGE_ID, COLUMN_CONTACT_ID, COLUMN_PHONE_NUMBER, COLUMN_MESSAGE_TEXT, COLUMN_TIMESTAMP, COLUMN_MESSAGE_DIR};
         String selection = COLUMN_CONTACT_ID + " = ?";
         String[] selectionArgs = {String.valueOf(contactId)};
 
@@ -75,7 +77,8 @@ public class SMSDataSource {
                     cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CONTACT_ID)),
                     cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PHONE_NUMBER)),
                     cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_MESSAGE_TEXT)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TIMESTAMP))
+                    cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TIMESTAMP)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_MESSAGE_DIR))
                 );
                 messagesList.add(message);
             } while (cursor.moveToNext());

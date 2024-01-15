@@ -1,10 +1,12 @@
 package es.kingcreek.ft_hangouts.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -37,12 +39,17 @@ public class SMSAdapter extends RecyclerView.Adapter<SMSAdapter.ViewHolder> impl
         return new ViewHolder(view);
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        SMSModel contact = sms.get(position);
+        SMSModel smsModel = sms.get(position);
 
-        holder.textViewDate.setText(contact.getTime());
-        holder.textViewMessage.setText(contact.getMessage());
+        holder.textViewDate.setText(smsModel.getTime());
+        holder.textViewMessage.setText(smsModel.getMessage());
+        if (smsModel.getInOut() == 1)
+            holder.imageViewMessageType.setImageDrawable(context.getResources().getDrawable(R.drawable.arrowdown));
+        else
+            holder.imageViewMessageType.setImageDrawable(context.getResources().getDrawable(R.drawable.arrowup));
 
     }
 
@@ -70,12 +77,13 @@ public class SMSAdapter extends RecyclerView.Adapter<SMSAdapter.ViewHolder> impl
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView textViewDate, textViewMessage;
+        ImageView imageViewMessageType;
 
         public ViewHolder(View itemView) {
             super(itemView);
             textViewDate = itemView.findViewById(R.id.textViewDate);
             textViewMessage = itemView.findViewById(R.id.textViewMessage);
-
+            imageViewMessageType = itemView.findViewById(R.id.imageViewMessageType);
         }
     }
 }

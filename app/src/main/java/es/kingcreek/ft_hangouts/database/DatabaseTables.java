@@ -33,6 +33,7 @@ public class DatabaseTables extends SQLiteOpenHelper {
     public static final String COLUMN_TIMESTAMP = "message_timestamp";
     public static final String COLUMN_PHONE_NUMBER = "phone_number";
     public static final String COLUMN_MESSAGE_TEXT = "message_text";
+    public static final String COLUMN_MESSAGE_DIR = "message_text_dir";
 
     private static final String DATABASE_CONTACTS = "create table "
             + TABLE_CONTACTS + "("
@@ -50,6 +51,7 @@ public class DatabaseTables extends SQLiteOpenHelper {
                     COLUMN_CONTACT_ID + " INTEGER, " +
                     COLUMN_TIMESTAMP + " TEXT, " +
                     COLUMN_PHONE_NUMBER + " TEXT, " +
+                    COLUMN_MESSAGE_DIR + " TEXT, " +
                     COLUMN_MESSAGE_TEXT + " TEXT);";
 
     public DatabaseTables(Context context) {

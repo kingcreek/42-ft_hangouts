@@ -59,5 +59,6 @@
 
     <string name="need_number">The number field is required.</string>
     <string name="need_name">The name field is required.</string>
+    <string name="empty_sms">The message cannot be empty.</string>
 
 </resources>

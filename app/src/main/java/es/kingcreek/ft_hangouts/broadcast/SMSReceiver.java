@@ -47,9 +47,9 @@ public class SMSReceiver extends BroadcastReceiver {
             String time = Helper.getCurrentDateTimeString();
             // Add message to DB
             if (contactID == -1)
-                SMSDataSource.getInstance(context).insertSMS(new SMSModel((int)ContactDataSource.getInstance(context).getContactByNumber(strNumber.toString()), strNumber.toString(), strMessage.toString(), time));
+                SMSDataSource.getInstance(context).insertSMS(new SMSModel((int)ContactDataSource.getInstance(context).getContactByNumber(strNumber.toString()), strNumber.toString(), strMessage.toString(), time, 1));
             else
-                SMSDataSource.getInstance(context).insertSMS(new SMSModel(contactID, strNumber.toString(), strMessage.toString(), time));
+                SMSDataSource.getInstance(context).insertSMS(new SMSModel(contactID, strNumber.toString(), strMessage.toString(), time, 1));
 
             // Send broadcast to update MainActivity
             Intent mainBroadcast = new Intent();
@@ -60,10 +60,11 @@ public class SMSReceiver extends BroadcastReceiver {
             // Send broadcast to update ContactDetails
             Intent contactBroadcast = new Intent();
             contactBroadcast.setAction(Constants.SMS_RECEIVED_DETAILS);
-            contactBroadcast.putExtra("contactID", contactID);
+            contactBroadcast.putExtra("contactID", (int)ContactDataSource.getInstance(context).getContactByNumber(strNumber.toString()));
             contactBroadcast.putExtra("phoneNumber", strNumber.toString());
             contactBroadcast.putExtra("message", strMessage.toString());
             contactBroadcast.putExtra("time", time);
+            contactBroadcast.putExtra("inOut", 1);
             context.sendBroadcast(contactBroadcast);
         }
     }

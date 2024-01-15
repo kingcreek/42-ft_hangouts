@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     app:cardCornerRadius="8dp"
     app:cardElevation="4dp"
-    android:layout_margin="8dp">
+    android:layout_margin="4dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,14 +13,12 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Fecha -->
         <TextView
             android:id="@+id/textViewDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="12sp"/>
 
-        <!-- Mensaje -->
         <TextView
             android:id="@+id/textViewMessage"
             android:layout_width="wrap_content"
@@ -28,5 +26,14 @@
             android:textSize="16sp"/>
 
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageViewMessageType"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="top|end"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/arrowdown" />
 
 </androidx.cardview.widget.CardView>

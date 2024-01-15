@@ -37,7 +37,6 @@ public class NewMessageDialog extends Dialog {
             if (positiveClickListener != null) {
                 positiveClickListener.onClick(this, DialogInterface.BUTTON_POSITIVE);
             }
-            dismiss();
         });
 
         buttonNegative.setOnClickListener(view -> {

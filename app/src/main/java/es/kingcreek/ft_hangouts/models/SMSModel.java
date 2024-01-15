@@ -6,21 +6,24 @@ public class SMSModel {
     private int contactId;
     private String phoneNumber;
     private String message;
+    private int inOut;
 
-    public SMSModel(int id, int contactId, String phoneNumber, String message, String time)
+    public SMSModel(int id, int contactId, String phoneNumber, String message, String time, int inOut)
     {
         this.id = id;
         this.contactId = contactId;
         this.phoneNumber = phoneNumber;
         this.message = message;
         this.time = time;
+        this.inOut = inOut;
     }
-    public SMSModel(int contactId, String phoneNumber, String message, String time)
+    public SMSModel(int contactId, String phoneNumber, String message, String time, int inOut)
     {
         this.contactId = contactId;
         this.phoneNumber = phoneNumber;
         this.message = message;
         this.time = time;
+        this.inOut = inOut;
     }
 
     public String getTime() {
@@ -37,6 +40,14 @@ public class SMSModel {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getInOut() {
+        return inOut;
+    }
+
+    public void setInOut(int inOut) {
+        this.inOut = inOut;
     }
 
     public int getContactId() {

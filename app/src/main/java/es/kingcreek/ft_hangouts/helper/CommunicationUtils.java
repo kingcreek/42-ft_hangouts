@@ -8,16 +8,20 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.telephony.SmsManager;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 
 import es.kingcreek.ft_hangouts.R;
+import es.kingcreek.ft_hangouts.database.SMSDataSource;
+import es.kingcreek.ft_hangouts.models.ContactModel;
+import es.kingcreek.ft_hangouts.models.SMSModel;
 import es.kingcreek.ft_hangouts.views.NewMessageDialog;
 
 public class CommunicationUtils {
 
-    public static void makePhoneCall(Context context, String phoneNumber) {
+    public static void makePhoneCall(final Context context, final String phoneNumber) {
         if (context.checkSelfPermission(Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
             Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNumber));
             context.startActivity(intent);
@@ -26,26 +30,39 @@ public class CommunicationUtils {
         }
     }
 
-    public static void sendSMS(final Context context, final String phoneNumber) {
-        NewMessageDialog customDialog = new NewMessageDialog(context);
-        customDialog.setDialogTitle(context.getString(R.string.sms_dialog));
-
-        customDialog.setPositiveClickListener((dialogInterface, i) -> {
-            String message = customDialog.getMessage();
-        });
-
-        customDialog.show();
-    }
-
-    private static void sendMessage(Context context, String phoneNumber, String message) {
+    public static void sendSMS(final Context context, final ContactModel contact) {
         if (context.checkSelfPermission(Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
-            SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage(phoneNumber, null, message, null, null);
+            NewMessageDialog customDialog = new NewMessageDialog(context);
+            customDialog.setDialogTitle(context.getString(R.string.sms_dialog));
+
+            customDialog.setPositiveClickListener((dialogInterface, i) -> {
+                String time = Helper.getCurrentDateTimeString();
+                String message = customDialog.getMessage();
+                if (!message.isEmpty()) {
+                    SmsManager smsManager = SmsManager.getDefault();
+                    smsManager.sendTextMessage(contact.getNumber(), null, message, null, null);
+                    SMSDataSource.getInstance(context).insertSMS(new SMSModel(contact.getId(), contact.getNumber(), message, time, 0));
+
+                    //send broadcast to update ContactDetails
+                    Intent contactBroadcast = new Intent();
+                    contactBroadcast.setAction(Constants.SMS_RECEIVED_DETAILS);
+                    contactBroadcast.putExtra("contactID", contact.getId());
+                    contactBroadcast.putExtra("phoneNumber", contact.getNumber());
+                    contactBroadcast.putExtra("message", message);
+                    contactBroadcast.putExtra("time", time);
+                    contactBroadcast.putExtra("inOut", 0);
+                    context.sendBroadcast(contactBroadcast);
+                    customDialog.dismiss();
+                } else {
+                    Toast.makeText(context, context.getText(R.string.empty_sms), Toast.LENGTH_LONG).show();
+                }
+            });
+            customDialog.show();
         } else {
-            // Pedir permisos para enviar SMS
             showPermissionExplanationDialog(context, Manifest.permission.SEND_SMS);
         }
     }
+
 
     private static void showPermissionExplanationDialog(final Context context, final String permission) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);

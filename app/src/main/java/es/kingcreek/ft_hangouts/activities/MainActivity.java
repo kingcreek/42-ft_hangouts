@@ -61,13 +61,14 @@ public class MainActivity extends AppCompatActivity implements OnDialogDismissLi
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // Change toolbar Color
-        int toolbarColor = PreferenceHelper.getInstance(getApplicationContext()).getToolbarColor();
-        Helper.changeToolbarColor(toolbar, toolbarColor);
-
         // Change dark/idiot mode
         boolean isDarkMode = PreferenceHelper.getInstance(getApplicationContext()).isDarkMode();
         setAppTheme(isDarkMode);
+
+        // Change toolbar Color
+        int toolbarColor = PreferenceHelper.getInstance(getApplicationContext()).getToolbarColor();
+        Helper.changeToolbarColor(toolbar, toolbarColor);
+        Helper.changeAppThemeColor(getApplicationContext(), toolbarColor);
 
         // Set RecyclerView
         RecyclerView recyclerView = findViewById(R.id.recyclerViewContacts);
@@ -210,8 +211,14 @@ public class MainActivity extends AppCompatActivity implements OnDialogDismissLi
 
     @Override
     public void onDialogDismissed() {
+        // Change dark/idiot mode
+        boolean isDarkMode = PreferenceHelper.getInstance(getApplicationContext()).isDarkMode();
+        setAppTheme(isDarkMode);
+
+        // Change toolbar Color
         int toolbarColor = PreferenceHelper.getInstance(getApplicationContext()).getToolbarColor();
         Helper.changeToolbarColor(toolbar, toolbarColor);
+        Helper.changeAppThemeColor(getApplicationContext(), toolbarColor);
     }
 
     private void permissions() {

@@ -32,7 +32,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_margin="16dp"
-        android:src="@drawable/ic_launcher_background"
+        android:src="@drawable/add"
         android:contentDescription="@string/add_contact" />
 
 </RelativeLayout>

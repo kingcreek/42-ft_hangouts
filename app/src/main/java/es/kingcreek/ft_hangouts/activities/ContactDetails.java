@@ -44,6 +44,7 @@ public class ContactDetails extends AppCompatActivity {
     private CardView cardViewEmail, cardViewAddress;
 
     Intent resultIntent = new Intent();
+    int finalContactID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +86,7 @@ public class ContactDetails extends AppCompatActivity {
             }
         }
         populateData(contactID);
-        int finalContactID = contactID;
+        finalContactID = contactID;
         buttonEdit.setOnClickListener(v -> {
             Intent i = new Intent(this, AddContactActivity.class);
             i.putExtra("contactID", finalContactID);
@@ -95,20 +96,21 @@ public class ContactDetails extends AppCompatActivity {
         smsReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if (intent.getAction() != null && intent.getAction().equals(Constants.SMS_RECEIVED_MAIN)) {
+                if (intent.getAction() != null && intent.getAction().equals(Constants.SMS_RECEIVED_DETAILS)) {
                     int contactID = intent.getIntExtra("contactID", -1);
                     String phoneNumber = intent.getStringExtra("phoneNumber");
                     String message = intent.getStringExtra("message");
                     String time = intent.getStringExtra("time");
+                    int inOut = intent.getIntExtra("inOut", 1);
 
-                    if(contactID != -1) {
-                        smsList.add(new SMSModel(contactID, phoneNumber, message, time));
+                    if(contactID != -1 && contactID == finalContactID) {
+                        smsList.add(new SMSModel(contactID, phoneNumber, message, time, inOut));
                         smsAdapter.notifyDataSetChanged();
                     }
                 }
             }
         };
-        IntentFilter intentFilter = new IntentFilter(Constants.SMS_RECEIVED_MAIN);
+        IntentFilter intentFilter = new IntentFilter(Constants.SMS_RECEIVED_DETAILS);
         registerReceiver(smsReceiver, intentFilter);
     }
 
@@ -140,7 +142,7 @@ public class ContactDetails extends AppCompatActivity {
         });
 
         buttonMessage.setOnClickListener(v -> {
-            CommunicationUtils.sendSMS(this, contact.getNumber());
+            CommunicationUtils.sendSMS(this, contact);
         });
     }
 
