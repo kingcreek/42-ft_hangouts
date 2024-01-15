@@ -7,6 +7,7 @@ public class Constants {
     public static final int PERMISSION_REQUEST_CODE = 1338;
 
     // Constants for request
+    public static final int VIEW_CONTACT_REQUEST_CODE = 4242;
     public static final int EDIT_CONTACT_REQUEST_CODE = 424;
     public static final int ADD_CONTACT_REQUEST_CODE = 42;
     public static final int PICK_IMAGE_REQUEST_CODE = 424;

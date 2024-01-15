@@ -57,4 +57,7 @@
 
     <string name="sms_dialog">Send message</string>
 
+    <string name="need_number">The number field is required.</string>
+    <string name="need_name">The name field is required.</string>
+
 </resources>

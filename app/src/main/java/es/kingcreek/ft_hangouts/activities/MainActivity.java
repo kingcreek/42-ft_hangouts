@@ -30,6 +30,7 @@ import es.kingcreek.ft_hangouts.helper.PreferenceHelper;
 import es.kingcreek.ft_hangouts.interfaces.OnDialogDismissListener;
 import es.kingcreek.ft_hangouts.models.ContactModel;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -148,6 +149,28 @@ public class MainActivity extends AppCompatActivity implements OnDialogDismissLi
                 if (newContactId != -1) {
                     addContactUpdate(newContactId);
                 }
+            }
+        } else if (requestCode == Constants.VIEW_CONTACT_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK && data != null) {
+                int newContactId = data.getIntExtra("newContact", -1);
+                if (newContactId != -1) {
+                    ContactModel contact = ContactDataSource.getInstance(this).getContactById(newContactId);
+                    findAndReplace(contactList, contact);
+                    findAndReplace(filteredContacts, contact);
+                    if (contactAdapter.isFiltering()) {
+                        contactAdapter.filter(contactAdapter.getFilter());
+                    }
+                }
+            }
+        }
+    }
+
+    private void findAndReplace(List<ContactModel> lst, ContactModel contact) {
+        for (int i = 0; i < lst.size(); i++) {
+            if (lst.get(i).getId() == contact.getId()) {
+                lst.set(i, contact);
+                contactAdapter.notifyItemChanged(i);
+                return;
             }
         }
     }

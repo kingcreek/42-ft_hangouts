@@ -25,7 +25,7 @@ public class AddContactActivity extends AppCompatActivity {
     private TextInputEditText etNumber, etFirstName, etLastName, etAddress, etEmail;
     private Button btnAddContact, btnSelectImage, btnRemoveImage;
     private ImageView imagePreview;
-    private String imageUri;
+    private String imageUri = "";
 
     int contactID = -1;
 
@@ -63,8 +63,9 @@ public class AddContactActivity extends AppCompatActivity {
                 etEmail.setText(contact.getEmail());
                 if(!contact.getImage().isEmpty())
                 {
+                    imageUri = contact.getImage();
                     imagePreview.setVisibility(View.VISIBLE);
-                    imagePreview.setImageURI(Uri.parse(contact.getImage()));
+                    imagePreview.setImageURI(Uri.parse(imageUri));
                     btnRemoveImage.setVisibility(View.VISIBLE);
                 }
             }
@@ -81,19 +82,29 @@ public class AddContactActivity extends AppCompatActivity {
             String email = etEmail.getText().toString();
             ContactModel newContact = new ContactModel(number, firstName, lastName, address, email, imageUri);
 
+            if(number.isEmpty())
+            {
+                Toast.makeText(getApplicationContext(), getString(R.string.need_number), Toast.LENGTH_LONG).show();
+                return;
+            }
+            if(firstName.isEmpty())
+            {
+                Toast.makeText(getApplicationContext(), getString(R.string.need_name), Toast.LENGTH_LONG).show();
+                return;
+            }
+
             ContactDataSource dataSource = ContactDataSource.getInstance(getApplicationContext());
-            long result = -1;
             if(contactID != -1) {
                 newContact.setId(contactID);
-                result = dataSource.updateContact(newContact);
+                dataSource.updateContact(newContact);
             }
-             else
-                 result = dataSource.insertContact(newContact);
+            else
+                contactID = (int)dataSource.insertContact(newContact);
 
-            if (result != -1) {
+            if (contactID != -1) {
                 Toast.makeText(getApplicationContext(), getString(R.string.insert_success), Toast.LENGTH_LONG).show();
                 Intent resultIntent = new Intent();
-                resultIntent.putExtra("newContact", (int)result);
+                resultIntent.putExtra("newContact", contactID);
                 setResult(RESULT_OK, resultIntent);
                 finish();
             } else {

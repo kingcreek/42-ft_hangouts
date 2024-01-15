@@ -1,5 +1,6 @@
 package es.kingcreek.ft_hangouts.activities;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -41,6 +42,8 @@ public class ContactDetails extends AppCompatActivity {
     private RecyclerView recyclerView;
     private SMSAdapter smsAdapter;
     private CardView cardViewEmail, cardViewAddress;
+
+    Intent resultIntent = new Intent();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +116,8 @@ public class ContactDetails extends AppCompatActivity {
     {
         // Get Contact
         ContactModel contact = ContactDataSource.getInstance(getApplicationContext()).getContactById(contactID);
-
+        if (contact == null)
+            return;
         //load image
         if (contact.getImage() != null) {
             profileImage.setImageURI(Uri.parse(contact.getImage()));
@@ -149,5 +153,25 @@ public class ContactDetails extends AppCompatActivity {
         smsAdapter = new SMSAdapter(this, smsList);
         smsAdapter.attachSwipeToDelete(recyclerView);
         recyclerView.setAdapter(smsAdapter);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == Constants.EDIT_CONTACT_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK && data != null) {
+                int newContactId = data.getIntExtra("newContact", -1);
+                if (newContactId != -1) {
+                    populateData(newContactId);
+                    resultIntent.putExtra("newContact", (int)newContactId);
+                    setResult(RESULT_OK, resultIntent);
+                }
+            }
+        }
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }

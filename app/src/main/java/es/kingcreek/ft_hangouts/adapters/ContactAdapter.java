@@ -1,5 +1,9 @@
 package es.kingcreek.ft_hangouts.adapters;
 
+import static es.kingcreek.ft_hangouts.helper.Constants.ADD_CONTACT_REQUEST_CODE;
+import static es.kingcreek.ft_hangouts.helper.Constants.VIEW_CONTACT_REQUEST_CODE;
+
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -61,7 +65,8 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         holder.element.setOnClickListener(v -> {
             Intent i = new Intent(context, ContactDetails.class);
             i.putExtra("contact", contact.getId());
-            context.startActivity(i);
+            ((Activity) context).startActivityForResult(i, VIEW_CONTACT_REQUEST_CODE);
+            //context.startActivity(i);
         });
 
     }

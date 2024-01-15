@@ -43,7 +43,4 @@ send sms: `sms send <phone_number> <message>`
 
 ### TO DO
 
-In AddContact, can't create contact without name and phone number, other fields are optional
-When image is changed, refresh MainActivity and ContactActivity
-Landscape with prevent refresh activity
 Add in/out into message db, add outcome messages to db (add icon to in/out messages in contact details recyclerview)
