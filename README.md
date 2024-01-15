@@ -37,7 +37,7 @@
 
 Install telnet client
 
-connect: `telnet localhost <emulator_port>` (usually 5554, can check with adb devices)
+connect: `telnet localhost <emulator_port>` (usually 5554, can check with `adb devices`)
 
 send sms: `sms send <phone_number> <message>`
 
