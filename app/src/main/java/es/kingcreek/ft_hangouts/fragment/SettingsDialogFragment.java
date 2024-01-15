@@ -2,20 +2,28 @@ package es.kingcreek.ft_hangouts.fragment;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.DialogFragment;
 
+import java.util.Arrays;
+import java.util.Locale;
+
 import es.kingcreek.ft_hangouts.R;
+import es.kingcreek.ft_hangouts.activities.MainActivity;
+import es.kingcreek.ft_hangouts.helper.Helper;
 import es.kingcreek.ft_hangouts.helper.PreferenceHelper;
 import es.kingcreek.ft_hangouts.interfaces.OnDialogDismissListener;
 import es.kingcreek.ft_hangouts.views.ColorPickerView;
@@ -106,5 +114,10 @@ public class SettingsDialogFragment extends DialogFragment {
         if (getActivity() instanceof OnDialogDismissListener) {
             ((OnDialogDismissListener) getActivity()).onDialogDismissed();
         }
+    }
+
+    private String getLanguageDisplayName(String languageCode) {
+        Locale locale = new Locale(languageCode);
+        return locale.getDisplayName(locale);
     }
 }

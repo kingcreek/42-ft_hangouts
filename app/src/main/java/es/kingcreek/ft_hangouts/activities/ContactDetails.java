@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -28,6 +29,7 @@ import es.kingcreek.ft_hangouts.database.ContactDataSource;
 import es.kingcreek.ft_hangouts.database.SMSDataSource;
 import es.kingcreek.ft_hangouts.helper.CommunicationUtils;
 import es.kingcreek.ft_hangouts.helper.Constants;
+import es.kingcreek.ft_hangouts.helper.PreferenceHelper;
 import es.kingcreek.ft_hangouts.models.ContactModel;
 import es.kingcreek.ft_hangouts.models.SMSModel;
 
@@ -138,6 +140,11 @@ public class ContactDetails extends AppCompatActivity {
         populateReciclerView(recyclerView, contactID);
 
         buttonCall.setOnClickListener(v -> {
+            if (!PreferenceHelper.getInstance(this).isBonusActive())
+            {
+                Toast.makeText(this, getString(R.string.only_bonus), Toast.LENGTH_LONG).show();
+                return;
+            }
             CommunicationUtils.makePhoneCall(this, contact.getNumber());
         });
 

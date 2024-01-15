@@ -9,10 +9,12 @@ import android.telephony.SmsMessage;
 import android.util.Log;
 import android.widget.Toast;
 
+import es.kingcreek.ft_hangouts.R;
 import es.kingcreek.ft_hangouts.database.ContactDataSource;
 import es.kingcreek.ft_hangouts.database.SMSDataSource;
 import es.kingcreek.ft_hangouts.helper.Constants;
 import es.kingcreek.ft_hangouts.helper.Helper;
+import es.kingcreek.ft_hangouts.helper.PreferenceHelper;
 import es.kingcreek.ft_hangouts.models.ContactModel;
 import es.kingcreek.ft_hangouts.models.SMSModel;
 
@@ -20,12 +22,15 @@ public class SMSReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent)
     {
+        if (!PreferenceHelper.getInstance(context).isBonusActive())
+        {
+            Toast.makeText(context, context.getString(R.string.only_bonus), Toast.LENGTH_LONG).show();
+            return;
+        }
         Bundle myBundle = intent.getExtras();
         SmsMessage[] messages = null;
         StringBuilder strNumber = new StringBuilder();
         StringBuilder strMessage = new StringBuilder();
-
-        //DatabaseHelper myDb = DatabaseHelper.getInstance(context);
 
         if (myBundle != null)
         {

@@ -18,6 +18,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import es.kingcreek.ft_hangouts.R;
 import es.kingcreek.ft_hangouts.database.ContactDataSource;
 import es.kingcreek.ft_hangouts.helper.Constants;
+import es.kingcreek.ft_hangouts.helper.PreferenceHelper;
 import es.kingcreek.ft_hangouts.models.ContactModel;
 
 public class AddContactActivity extends AppCompatActivity {
@@ -121,6 +122,11 @@ public class AddContactActivity extends AppCompatActivity {
     }
 
     private void pickImageFromGallery() {
+        if (!PreferenceHelper.getInstance(this).isBonusActive())
+        {
+            Toast.makeText(this, getString(R.string.only_bonus), Toast.LENGTH_LONG).show();
+            return;
+        }
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("image/*");
