@@ -97,6 +97,14 @@
         android:scaleType="centerCrop" />
 
     <Button
+        android:id="@+id/btnRemoveImage"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/remove_image" />
+
+    <Button
         android:id="@+id/btnSelectImage"
         style="@style/Widget.MaterialComponents.Button"
         android:layout_width="match_parent"

@@ -23,7 +23,7 @@ import es.kingcreek.ft_hangouts.models.ContactModel;
 public class AddContactActivity extends AppCompatActivity {
 
     private TextInputEditText etNumber, etFirstName, etLastName, etAddress, etEmail;
-    private Button btnAddContact, btnSelectImage;
+    private Button btnAddContact, btnSelectImage, btnRemoveImage;
     private ImageView imagePreview;
     private String imageUri;
 
@@ -43,6 +43,8 @@ public class AddContactActivity extends AppCompatActivity {
         // Button
         btnAddContact = findViewById(R.id.btnAddContact);
         btnSelectImage = findViewById(R.id.btnSelectImage);
+        btnRemoveImage = findViewById(R.id.btnRemoveImage);
+        btnRemoveImage.setVisibility(View.GONE);
         // ImageView
         imagePreview = findViewById(R.id.imagePreview);
         imagePreview.setVisibility(View.GONE);
@@ -54,7 +56,6 @@ public class AddContactActivity extends AppCompatActivity {
             if(contactID != -1)
             {
                 ContactModel contact = ContactDataSource.getInstance(getApplicationContext()).getContactById(contactID);
-                Log.e("contactid", "nbr: " + contact.getNumber());
                 etNumber.setText(contact.getNumber());
                 etFirstName.setText(contact.getFirstName());
                 etLastName.setText(contact.getLastName());
@@ -64,6 +65,7 @@ public class AddContactActivity extends AppCompatActivity {
                 {
                     imagePreview.setVisibility(View.VISIBLE);
                     imagePreview.setImageURI(Uri.parse(contact.getImage()));
+                    btnRemoveImage.setVisibility(View.VISIBLE);
                 }
             }
         }
@@ -98,6 +100,13 @@ public class AddContactActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), getString(R.string.insert_fail), Toast.LENGTH_LONG).show();
             }
         });
+
+        btnRemoveImage.setOnClickListener(v -> {
+            imageUri = "";
+            imagePreview.setImageDrawable(null);
+            imagePreview.setVisibility(View.GONE);
+            btnRemoveImage.setVisibility(View.GONE);
+        });
     }
 
     private void pickImageFromGallery() {
@@ -119,6 +128,7 @@ public class AddContactActivity extends AppCompatActivity {
             imageUri = selectedImageUri.toString();
             imagePreview.setVisibility(View.VISIBLE);
             imagePreview.setImageURI(selectedImageUri);
+            btnRemoveImage.setVisibility(View.VISIBLE);
         }
     }
 

@@ -40,3 +40,9 @@ Install telnet client
 connect: `telnet localhost <emulator_port>` (usually 5554, can check with adb devices)
 
 send sms: `sms send <phone_number> <message>`
+
+### TO DO
+
+When image is changed, refresh MainActivity and ContactActivity
+Landscape with prevent refresh activity
+Add in/out into message db, add outcome messages to db (add icon to in/out messages in contact details recyclerview)
