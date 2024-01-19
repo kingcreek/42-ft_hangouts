@@ -43,6 +43,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements OnDialogDismissListener {
 
+    private final String TAG = "MainActivity";
     private BroadcastReceiver smsReceiver;
     private ContactAdapter contactAdapter;
     List<ContactModel> filteredContacts;

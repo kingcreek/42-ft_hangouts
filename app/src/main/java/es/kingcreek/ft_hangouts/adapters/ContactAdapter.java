@@ -30,6 +30,7 @@ import es.kingcreek.ft_hangouts.views.SwipeToDeleteCallback;
 
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> implements SwipeToDeleteCallback.SwipeToDeleteListener {
 
+    private final String TAG = "ContactAdapter";
     private List<ContactModel> contacts;
     private List<ContactModel> filteredContacts;
     private Context context;
@@ -60,13 +61,14 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         holder.textViewLastName.setText(contact.getLastName());
         if (!contact.getImage().isEmpty()) {
             holder.imageViewContact.setImageURI(Uri.parse(contact.getImage()));
+        }else{
+            holder.imageViewContact.setImageDrawable(context.getDrawable(R.drawable.profile));
         }
 
         holder.element.setOnClickListener(v -> {
             Intent i = new Intent(context, ContactDetails.class);
             i.putExtra("contact", contact.getId());
             ((Activity) context).startActivityForResult(i, VIEW_CONTACT_REQUEST_CODE);
-            //context.startActivity(i);
         });
 
     }
