@@ -25,6 +25,7 @@ import es.kingcreek.ft_hangouts.R;
 import es.kingcreek.ft_hangouts.activities.ContactDetails;
 import es.kingcreek.ft_hangouts.database.ContactDataSource;
 import es.kingcreek.ft_hangouts.database.SMSDataSource;
+import es.kingcreek.ft_hangouts.helper.BitmapHelper;
 import es.kingcreek.ft_hangouts.models.ContactModel;
 import es.kingcreek.ft_hangouts.views.SwipeToDeleteCallback;
 
@@ -60,7 +61,9 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         holder.textViewFirstName.setText(contact.getFirstName());
         holder.textViewLastName.setText(contact.getLastName());
         if (!contact.getImage().isEmpty()) {
-            holder.imageViewContact.setImageURI(Uri.parse(contact.getImage()));
+            BitmapHelper.LoadImageTask loadImageTask = new BitmapHelper.LoadImageTask(holder.imageViewContact);
+            loadImageTask.execute(contact.getImage());
+            //holder.imageViewContact.setImageURI(Uri.parse(contact.getImage()));
         }else{
             holder.imageViewContact.setImageDrawable(context.getDrawable(R.drawable.profile));
         }

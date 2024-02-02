@@ -27,6 +27,7 @@ import es.kingcreek.ft_hangouts.adapters.ContactAdapter;
 import es.kingcreek.ft_hangouts.adapters.SMSAdapter;
 import es.kingcreek.ft_hangouts.database.ContactDataSource;
 import es.kingcreek.ft_hangouts.database.SMSDataSource;
+import es.kingcreek.ft_hangouts.helper.BitmapHelper;
 import es.kingcreek.ft_hangouts.helper.CommunicationUtils;
 import es.kingcreek.ft_hangouts.helper.Constants;
 import es.kingcreek.ft_hangouts.helper.PreferenceHelper;
@@ -123,8 +124,11 @@ public class ContactDetails extends AppCompatActivity {
         if (contact == null)
             return;
         //load image
-        if (contact.getImage() != null) {
-            profileImage.setImageURI(Uri.parse(contact.getImage()));
+        if (!contact.getImage().isEmpty()) {
+            BitmapHelper.LoadImageTask loadImageTask = new BitmapHelper.LoadImageTask(profileImage);
+            loadImageTask.execute(contact.getImage());
+        }else{
+            profileImage.setImageDrawable(getApplicationContext().getDrawable(R.drawable.profile));
         }
         textViewName.setText(new StringBuilder().append(contact.getFirstName()).append(" ").append(contact.getLastName()).toString());
         textViewNumber.setText(contact.getNumber());

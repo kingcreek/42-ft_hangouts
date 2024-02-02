@@ -17,6 +17,7 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import es.kingcreek.ft_hangouts.R;
 import es.kingcreek.ft_hangouts.database.ContactDataSource;
+import es.kingcreek.ft_hangouts.helper.BitmapHelper;
 import es.kingcreek.ft_hangouts.helper.Constants;
 import es.kingcreek.ft_hangouts.helper.PreferenceHelper;
 import es.kingcreek.ft_hangouts.models.ContactModel;
@@ -66,7 +67,11 @@ public class AddContactActivity extends AppCompatActivity {
                 {
                     imageUri = contact.getImage();
                     imagePreview.setVisibility(View.VISIBLE);
-                    imagePreview.setImageURI(Uri.parse(imageUri));
+                    if (!imageUri.isEmpty()) {
+                        BitmapHelper.LoadImageTask loadImageTask = new BitmapHelper.LoadImageTask(imagePreview);
+                        loadImageTask.execute(imageUri);
+                    }
+                    //imagePreview.setImageURI(Uri.parse(imageUri));
                     btnRemoveImage.setVisibility(View.VISIBLE);
                 }
             }
@@ -81,7 +86,7 @@ public class AddContactActivity extends AppCompatActivity {
             String lastName = etLastName.getText().toString();
             String address = etAddress.getText().toString();
             String email = etEmail.getText().toString();
-            ContactModel newContact = new ContactModel(number, firstName, lastName, address, email, imageUri);
+            ContactModel newContact = new ContactModel(number, firstName, lastName, address, email, BitmapHelper.stringToBase64(getApplicationContext(), imageUri));
 
             if(number.isEmpty())
             {
