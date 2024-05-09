@@ -56,6 +56,7 @@
     <string name="closing_t">Última ejecución:</string>
 
     <string name="sms_dialog">Enviar mensaje</string>
+    <string name="dialog_txt">Inserte su mensaje</string>
 
     <string name="need_number">El campo de número es obligatorio.</string>
     <string name="need_name">El campo de nombre es obligatorio.</string>

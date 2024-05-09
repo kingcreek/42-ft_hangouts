@@ -212,7 +212,7 @@ public class MainActivity extends AppCompatActivity implements OnDialogDismissLi
 
     @Override
     public void onDialogDismissed() {
-        // Change dark/idiot mode
+        // Change dark/white mode
         boolean isDarkMode = PreferenceHelper.getInstance(getApplicationContext()).isDarkMode();
         setAppTheme(isDarkMode);
 
@@ -223,27 +223,27 @@ public class MainActivity extends AppCompatActivity implements OnDialogDismissLi
     }
 
     private void permissions() {
-        // Lista de permisos que necesitas
+        // Required permissions
         String[] requiredPermissions = {
-                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.READ_MEDIA_IMAGES,
                 Manifest.permission.RECEIVE_SMS,
                 Manifest.permission.SEND_SMS,
                 Manifest.permission.CALL_PHONE/*,
                 Manifest.permission.BIND_NOTIFICATION_LISTENER_SERVICE*/
         };
 
-        // Lista de permisos que aún no han sido concedidos
+        // List of permissions that have not yet been granted
         List<String> permissionsToRequest = new ArrayList<>();
 
-        // Verificar cada permiso individualmente
+        // Check each permission individually
         for (String permission : requiredPermissions) {
             if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
-                // Permiso no concedido, agregar a la lista de permisos para solicitar
+                // Permission not granted, add to list of permissions to request
                 permissionsToRequest.add(permission);
             }
         }
 
-        // Convertir la lista de permisos a un array y solicitar permisos
+        // Convert the permission list to an array and request permissions
         if (!permissionsToRequest.isEmpty()) {
             String[] permissionsArray = permissionsToRequest.toArray(new String[0]);
             ActivityCompat.requestPermissions(this, permissionsArray, Constants.MI_REQUEST_CODE);
@@ -267,7 +267,7 @@ public class MainActivity extends AppCompatActivity implements OnDialogDismissLi
         String message = "";
 
         switch (permission) {
-            case Manifest.permission.READ_EXTERNAL_STORAGE:
+            case Manifest.permission.READ_MEDIA_IMAGES:
                 message = getString(R.string.permisson_storage);
                 break;
             case Manifest.permission.RECEIVE_SMS:

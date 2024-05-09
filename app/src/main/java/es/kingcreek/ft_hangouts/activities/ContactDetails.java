@@ -134,13 +134,16 @@ public class ContactDetails extends AppCompatActivity {
         textViewNumber.setText(contact.getNumber());
         if (contact.getEmail().isEmpty())
             cardViewEmail.setVisibility(View.GONE);
-        else
+        else {
             textViewEmail.setText(contact.getEmail());
+            cardViewEmail.setVisibility(View.VISIBLE);
+        }
         if (contact.getAddress().isEmpty())
             cardViewAddress.setVisibility(View.GONE);
-        else
+        else {
             textViewAddress.setText(contact.getAddress());
-
+            cardViewAddress.setVisibility(View.VISIBLE);
+        }
         populateReciclerView(recyclerView, contactID);
 
         buttonCall.setOnClickListener(v -> {

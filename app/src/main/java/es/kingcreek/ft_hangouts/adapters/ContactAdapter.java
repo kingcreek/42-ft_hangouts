@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,7 +35,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
     private final String TAG = "ContactAdapter";
     private List<ContactModel> contacts;
     private List<ContactModel> filteredContacts;
-    private Context context;
+    private final Context context;
     private final ItemTouchHelper itemTouchHelper;
     private boolean isFiltering = false;
     private String filter = "";
@@ -47,8 +48,9 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         itemTouchHelper = new ItemTouchHelper(swipeToDeleteCallback);
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.contact_list_item, parent, false);
         return new ViewHolder(view);
     }
@@ -125,7 +127,6 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
             textViewLastName = itemView.findViewById(R.id.textViewLastName);
             element = itemView.findViewById(R.id.element);
             imageViewContact = itemView.findViewById(R.id.imageViewContact);
-
         }
     }
 
