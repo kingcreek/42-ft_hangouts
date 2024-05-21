@@ -94,8 +94,15 @@ public class MainActivity extends AppCompatActivity implements OnDialogDismissLi
                 }
             }
         };
+        // Register receiver
         IntentFilter intentFilter = new IntentFilter(Constants.SMS_RECEIVED_MAIN);
-        registerReceiver(smsReceiver, intentFilter);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(smsReceiver, intentFilter, RECEIVER_EXPORTED);
+        }else {
+            registerReceiver(smsReceiver, intentFilter);
+        }
+        //IntentFilter intentFilter = new IntentFilter(Constants.SMS_RECEIVED_MAIN);
+        //registerReceiver(smsReceiver, intentFilter);
     }
 
     @Override
