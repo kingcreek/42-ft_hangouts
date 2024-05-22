@@ -19,14 +19,12 @@ import es.kingcreek.ft_hangouts.models.ContactModel;
 import es.kingcreek.ft_hangouts.models.SMSModel;
 
 public class SMSReceiver extends BroadcastReceiver {
+
+    private final String TAG = "SMSReceiver";
     @Override
     public void onReceive(Context context, Intent intent)
     {
-        if (!PreferenceHelper.getInstance(context).isBonusActive())
-        {
-            Toast.makeText(context, context.getString(R.string.only_bonus), Toast.LENGTH_LONG).show();
-            return;
-        }
+
         Bundle myBundle = intent.getExtras();
         SmsMessage[] messages = null;
         StringBuilder strNumber = new StringBuilder();
@@ -35,9 +33,7 @@ public class SMSReceiver extends BroadcastReceiver {
         if (myBundle != null)
         {
             Object [] pdus = (Object[]) myBundle.get("pdus");
-
             messages = new SmsMessage[pdus.length];
-
             for (int i = 0; i < messages.length; i++)
             {
                 String format = myBundle.getString("format");
@@ -47,9 +43,21 @@ public class SMSReceiver extends BroadcastReceiver {
                 strMessage.append(messages[i].getMessageBody());
             }
 
+            // Check if bonus is active or not
+            if (!PreferenceHelper.getInstance(context).isBonusActive())
+            {
+                // Prevent add number if not registered on own contacts
+                if (ContactDataSource.getInstance(context).getContactByNumber(strNumber.toString()) == -1) {
+                    Toast.makeText(context, context.getString(R.string.only_bonus), Toast.LENGTH_LONG).show();
+                    return;
+                }
+            }
+
             // Add contact to DB
             int contactID = (int)ContactDataSource.getInstance(context).insertContact(new ContactModel(strNumber.toString(), strNumber.toString()));
             String time = Helper.getCurrentDateTimeString();
+
+
             // Add message to DB
             if (contactID == -1)
                 SMSDataSource.getInstance(context).insertSMS(new SMSModel((int)ContactDataSource.getInstance(context).getContactByNumber(strNumber.toString()), strNumber.toString(), strMessage.toString(), time, 1));

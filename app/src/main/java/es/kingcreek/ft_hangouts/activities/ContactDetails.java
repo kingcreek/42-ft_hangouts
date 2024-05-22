@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -99,6 +100,7 @@ public class ContactDetails extends AppCompatActivity {
         smsReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+                Log.e("test", "asasasas");
                 if (intent.getAction() != null && intent.getAction().equals(Constants.SMS_RECEIVED_DETAILS)) {
                     int contactID = intent.getIntExtra("contactID", -1);
                     String phoneNumber = intent.getStringExtra("phoneNumber");
@@ -114,7 +116,11 @@ public class ContactDetails extends AppCompatActivity {
             }
         };
         IntentFilter intentFilter = new IntentFilter(Constants.SMS_RECEIVED_DETAILS);
-        registerReceiver(smsReceiver, intentFilter);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(smsReceiver, intentFilter, RECEIVER_EXPORTED);
+        }else {
+            registerReceiver(smsReceiver, intentFilter);
+        }
     }
 
     private void populateData(int contactID)

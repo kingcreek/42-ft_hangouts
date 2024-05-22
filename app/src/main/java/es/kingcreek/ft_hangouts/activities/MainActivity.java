@@ -18,6 +18,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 
 import es.kingcreek.ft_hangouts.R;
@@ -101,8 +102,6 @@ public class MainActivity extends AppCompatActivity implements OnDialogDismissLi
         }else {
             registerReceiver(smsReceiver, intentFilter);
         }
-        //IntentFilter intentFilter = new IntentFilter(Constants.SMS_RECEIVED_MAIN);
-        //registerReceiver(smsReceiver, intentFilter);
     }
 
     @Override
@@ -232,11 +231,11 @@ public class MainActivity extends AppCompatActivity implements OnDialogDismissLi
     private void permissions() {
         // Required permissions
         String[] requiredPermissions = {
-                Manifest.permission.READ_MEDIA_IMAGES,
+                //Manifest.permission.READ_MEDIA_IMAGES,
+                //Manifest.permission.BIND_NOTIFICATION_LISTENER_SERVICE,
                 Manifest.permission.RECEIVE_SMS,
                 Manifest.permission.SEND_SMS,
-                Manifest.permission.CALL_PHONE/*,
-                Manifest.permission.BIND_NOTIFICATION_LISTENER_SERVICE*/
+                Manifest.permission.CALL_PHONE
         };
 
         // List of permissions that have not yet been granted
