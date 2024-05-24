@@ -39,6 +39,6 @@ Install telnet client
 
 connect: `telnet localhost <emulator_port>` (usually 5554, can check with `adb devices`)
 
-auth: `auth <key>` (Located in `.emulator_console_auth_token` file, inside /home directory or user/<your_user>/)
+auth: `auth <key>` (Located in `.emulator_console_auth_token` file, inside `/home` directory or `user/<your_user>/`)
 
 send sms: `sms send <phone_number> <message>`
