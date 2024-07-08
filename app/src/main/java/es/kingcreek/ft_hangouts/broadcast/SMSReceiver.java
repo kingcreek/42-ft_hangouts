@@ -43,16 +43,6 @@ public class SMSReceiver extends BroadcastReceiver {
                 strMessage.append(messages[i].getMessageBody());
             }
 
-            // Check if bonus is active or not
-            if (!PreferenceHelper.getInstance(context).isBonusActive())
-            {
-                // Prevent add number if not registered on own contacts
-                if (ContactDataSource.getInstance(context).getContactByNumber(strNumber.toString()) == -1) {
-                    Toast.makeText(context, context.getString(R.string.only_bonus), Toast.LENGTH_LONG).show();
-                    return;
-                }
-            }
-
             // Add contact to DB
             int contactID = (int)ContactDataSource.getInstance(context).insertContact(new ContactModel(strNumber.toString(), strNumber.toString()));
             String time = Helper.getCurrentDateTimeString();

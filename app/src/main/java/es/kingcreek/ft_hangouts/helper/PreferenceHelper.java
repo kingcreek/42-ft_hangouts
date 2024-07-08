@@ -36,14 +36,6 @@ public class PreferenceHelper {
         return preferences.getBoolean(Constants.KEY_IS_DARK_MODE, true);
     }
 
-    public void setBonusActive(boolean isBonusActive) {
-        preferences.edit().putBoolean(Constants.KEY_IS_BONUS_ACTIVE, isBonusActive).apply();
-    }
-
-    public boolean isBonusActive() {
-        return preferences.getBoolean(Constants.KEY_IS_BONUS_ACTIVE, false);
-    }
-
     public void saveLastTime(String lastTime) {
         preferences.edit().putString(Constants.KEY_LAST_TIME, lastTime).apply();
     }

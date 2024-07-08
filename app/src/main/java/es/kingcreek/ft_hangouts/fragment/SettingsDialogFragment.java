@@ -49,19 +49,16 @@ public class SettingsDialogFragment extends DialogFragment {
         // Views
         colorPickerView = view.findViewById(R.id.colorPicker);
         switchDarkMode = view.findViewById(R.id.switchDarkMode);
-        switchBonusMode = view.findViewById(R.id.switchBonusMode);
         btnCancel = view.findViewById(R.id.btnCancel);
         btnApply = view.findViewById(R.id.btnApply);
         time = view.findViewById(R.id.time);
 
         switchDarkMode.setChecked(preferences.isDarkMode());
-        switchBonusMode.setChecked(preferences.isBonusActive());
         time.setText(preferences.getLastTime());
 
         // Temp vars
         final int[] tcolor = {preferences.getToolbarColor()};
         final boolean[] tdarkMode = {preferences.isDarkMode()};
-        final boolean[] tbonus = {preferences.isBonusActive()};
 
         // Set color picker saved color
         colorPickerView.setInitialColor(tcolor[0]);
@@ -80,17 +77,9 @@ public class SettingsDialogFragment extends DialogFragment {
             }
         });
 
-        switchBonusMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                tbonus[0] = isChecked;
-            }
-        });
-
         btnApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                preferences.setBonusActive(tbonus[0]);
                 preferences.setDarkMode(tdarkMode[0]);
                 preferences.saveToolbarColor(tcolor[0]);
                 notifyChanges();

@@ -153,11 +153,6 @@ public class ContactDetails extends AppCompatActivity {
         populateReciclerView(recyclerView, contactID);
 
         buttonCall.setOnClickListener(v -> {
-            if (!PreferenceHelper.getInstance(this).isBonusActive())
-            {
-                Toast.makeText(this, getString(R.string.only_bonus), Toast.LENGTH_LONG).show();
-                return;
-            }
             CommunicationUtils.makePhoneCall(this, contact.getNumber());
         });
 

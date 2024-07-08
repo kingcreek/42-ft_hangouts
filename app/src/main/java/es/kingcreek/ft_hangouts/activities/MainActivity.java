@@ -21,6 +21,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 
+import es.kingcreek.ft_hangouts.MyApplication;
 import es.kingcreek.ft_hangouts.R;
 import es.kingcreek.ft_hangouts.adapters.ContactAdapter;
 import es.kingcreek.ft_hangouts.database.ContactDataSource;
@@ -35,6 +36,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+
 import androidx.appcompat.widget.SearchView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -71,6 +75,10 @@ public class MainActivity extends AppCompatActivity implements OnDialogDismissLi
         int toolbarColor = PreferenceHelper.getInstance(getApplicationContext()).getToolbarColor();
         Helper.changeToolbarColor(toolbar, toolbarColor);
         Helper.changeAppThemeColor(getApplicationContext(), toolbarColor);
+        //System bar
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(toolbarColor);
 
         // Set RecyclerView
         RecyclerView recyclerView = findViewById(R.id.recyclerViewContacts);
@@ -112,6 +120,14 @@ public class MainActivity extends AppCompatActivity implements OnDialogDismissLi
             unregisterReceiver(smsReceiver);
         }
         PreferenceHelper.getInstance(this).saveLastTime(Helper.getCurrentDateTimeString());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (MyApplication.comingFromActivity) {
+            MyApplication.comingFromActivity = false;
+        }
     }
 
     @Override
@@ -226,6 +242,10 @@ public class MainActivity extends AppCompatActivity implements OnDialogDismissLi
         int toolbarColor = PreferenceHelper.getInstance(getApplicationContext()).getToolbarColor();
         Helper.changeToolbarColor(toolbar, toolbarColor);
         Helper.changeAppThemeColor(getApplicationContext(), toolbarColor);
+        //System bar
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(toolbarColor);
     }
 
     private void permissions() {

@@ -86,7 +86,7 @@ public class AddContactActivity extends AppCompatActivity {
             String lastName = etLastName.getText().toString();
             String address = etAddress.getText().toString();
             String email = etEmail.getText().toString();
-            ContactModel newContact = new ContactModel(number, firstName, lastName, address, email, BitmapHelper.stringToBase64(getApplicationContext(), imageUri));
+            ContactModel newContact = new ContactModel(number, firstName, lastName, address, email, imageUri);
 
             if(number.isEmpty())
             {
@@ -127,11 +127,6 @@ public class AddContactActivity extends AppCompatActivity {
     }
 
     private void pickImageFromGallery() {
-        if (!PreferenceHelper.getInstance(this).isBonusActive())
-        {
-            Toast.makeText(this, getString(R.string.only_bonus), Toast.LENGTH_LONG).show();
-            return;
-        }
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("image/*");
@@ -147,7 +142,7 @@ public class AddContactActivity extends AppCompatActivity {
             Uri selectedImageUri = data.getData();
             ContentResolver contentResolver = getContentResolver();
             contentResolver.takePersistableUriPermission(selectedImageUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            imageUri = selectedImageUri.toString();
+            imageUri = BitmapHelper.stringToBase64(getApplicationContext(), selectedImageUri.toString());
             imagePreview.setVisibility(View.VISIBLE);
             imagePreview.setImageURI(selectedImageUri);
             btnRemoveImage.setVisibility(View.VISIBLE);

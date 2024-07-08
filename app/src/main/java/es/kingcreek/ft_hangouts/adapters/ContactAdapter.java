@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import es.kingcreek.ft_hangouts.MyApplication;
 import es.kingcreek.ft_hangouts.R;
 import es.kingcreek.ft_hangouts.activities.ContactDetails;
 import es.kingcreek.ft_hangouts.database.ContactDataSource;
@@ -65,12 +66,12 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         if (!contact.getImage().isEmpty()) {
             BitmapHelper.LoadImageTask loadImageTask = new BitmapHelper.LoadImageTask(holder.imageViewContact);
             loadImageTask.execute(contact.getImage());
-            //holder.imageViewContact.setImageURI(Uri.parse(contact.getImage()));
         }else{
             holder.imageViewContact.setImageDrawable(context.getDrawable(R.drawable.profile));
         }
 
         holder.element.setOnClickListener(v -> {
+            MyApplication.comingFromActivity = true;
             Intent i = new Intent(context, ContactDetails.class);
             i.putExtra("contact", contact.getId());
             ((Activity) context).startActivityForResult(i, VIEW_CONTACT_REQUEST_CODE);
